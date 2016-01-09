@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Jobs>
+	<General>
+			<Brawl>5</Brawl>
+			<Work>5</Work>
+	</General>	
+	<Harvesting>
+			<HarvestFood>1</HarvestFood>
+	</Harvesting>	
+	<Logging>
+			<FellTree>1</FellTree>
+	</Logging>	
+	<Cooking>
+			<CookFood>1</CookFood>
+	</Cooking>	
+</Jobs>

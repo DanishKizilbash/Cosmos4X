@@ -40,11 +40,13 @@ namespace Cosmos
 		public abstract void AddAnatomy ();
 		public override void SetLateAttributes ()
 		{
+
 			anatomy.MaxHunger = Parser.StringToFloat (def.GetAttribute ("Hunger"));
 			anatomy.MaxThirst = Parser.StringToFloat (def.GetAttribute ("Thirst"));
 			anatomy.Hunger = anatomy.MaxHunger;
 			anatomy.Thirst = anatomy.MaxThirst;
 			skills = SkillsTemplate.GetRandomizedTemplate ();
+
 		}
 
 		public override void Tick ()
@@ -75,8 +77,10 @@ namespace Cosmos
 		}
 		public virtual void Die ()
 		{
-			Debug.Log (ToString () + " died");
-			Destroy ();
+			if (!anatomy.Invincible) {
+				Debug.Log (ToString () + " died");
+				Destroy ();
+			}
 		}
 		public override void Destroy ()
 		{
@@ -85,7 +89,7 @@ namespace Cosmos
 		}
 		public override string DefaultID ()
 		{
-			return "Thing_Actor_Human_Male";
+			return "Thing_Actor_Ship_Escort";
 		}
 	}
 }

@@ -75,7 +75,11 @@ namespace Cosmos.AI
 			} else {
 				// default state
 			}
-			return curIntent.state;
+			if (curIntent != null) {
+				return curIntent.state;
+			} else {
+				return State.Failure;
+			}
 		}
 
 		public virtual void ProcessStimulus ()

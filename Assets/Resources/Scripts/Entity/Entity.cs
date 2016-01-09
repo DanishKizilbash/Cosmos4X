@@ -17,7 +17,6 @@ namespace Cosmos
 		public bool isInitiated = false;
 		private bool selected = false;
 		public bool selectable = true;
-		public bool forceChunkUpdate = false;
 		public List<Entity> linkedEntities = new List<Entity> ();
 		public bool adoptable = true;
 		public bool isSelected {

@@ -6,7 +6,7 @@ namespace Cosmos
 	public static class MeshManager
 	{
 		private static int dispIter;
-		public static int minPooledDisplays = 5000;
+		public static int minPooledDisplays = 500;
 		public static float poolGenMSLimit = 2;
 		public static Vector2 defaultMeshTileDim = new Vector2 (1, 1);
 		public static List<MeshDisplay> meshDisplays = new List<MeshDisplay> ();

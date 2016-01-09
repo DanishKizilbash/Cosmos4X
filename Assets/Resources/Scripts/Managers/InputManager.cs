@@ -54,16 +54,16 @@ namespace Cosmos
 		public static void ActOnKeys ()
 		{
 			if (IsKeyDown ("W")) {
-				DrawManager.MoveCameraBy (new Vector2 (0.5f, 0.5f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (0.0f, 1.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("S")) {
-				DrawManager.MoveCameraBy (new Vector2 (-0.5f, -0.5f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (0.0f, -1.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("A")) {
-				DrawManager.MoveCameraBy (new Vector2 (-0.5f, 0.5f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (-1.0f, 0.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("D")) {
-				DrawManager.MoveCameraBy (new Vector2 (0.5f, - 0.5f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("SPACE")) {
 				TickManager.SwitchPauseState ();

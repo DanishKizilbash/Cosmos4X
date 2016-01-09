@@ -61,7 +61,7 @@ namespace Cosmos
 		{
 			CameraPos += (TargetCameraPos - CameraPos) * CameraEase;
 			//Debug.Log (CameraPos);
-			Camera.main.transform.position = new Vector3 (CameraPos.x, -5, CameraPos.y);
+			Camera.main.transform.position = new Vector3 (CameraPos.x, CameraPos.y, -1);
 		}
 		public static void MoveCameraBy (Vector2 amount)
 		{

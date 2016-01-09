@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Standard Assets\Utility\HUDFPS.cs" />
+     <None Include="Assets\Resources\XMLDefs\ThingDefs.xml" />
+     <None Include="Assets\Resources\XMLDefs\JobDefs.xml" />
      <None Include="Assets\Resources\Shaders\TransparentCutoutDiffuse.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

@@ -96,7 +96,7 @@ namespace Cosmos
 			public static void Add (string baseClass, string type, string category, string id, Dictionary<string,string> attributes)
 			{
 				string defString = baseClass + "Def";
-				string query = "Eniso." + defString + ", " + typeof(Def).Assembly.FullName.ToString ();
+				string query = "Cosmos." + defString + ", " + typeof(Def).Assembly.FullName.ToString ();
 				
 				Type defType = Type.GetType (query);
 				if (defType != null) {

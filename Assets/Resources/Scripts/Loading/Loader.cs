@@ -5,21 +5,26 @@ using System.Xml;
 using System.Linq;
 using System.IO;
 
-namespace Cosmos {
-	public static class Loader {
-		public enum LoadState {
+namespace Cosmos
+{
+	public static class Loader
+	{
+		public enum LoadState
+		{
 			Loading,
 			Finished
 		}
 		public static LoadState curLoadState = LoadState.Finished;
-		public static void Init () {
+		public static void Init ()
+		{
 			curLoadState = LoadState.Loading;
 			LoadTextureFolders ();
-			//LoadXMLPaths ();
+			LoadXMLPaths ();
 			curLoadState = LoadState.Finished;
 		}
 
-		public static void LoadXMLPaths () {
+		public static void LoadXMLPaths ()
+		{
 			DirectoryInfo dir = new DirectoryInfo ("Assets/Resources/XMLDefs");
 			FileInfo[] info = dir.GetFiles ("*.xml");
 			var pathname = info.Select (f => f.FullName).ToArray ();
@@ -31,11 +36,13 @@ namespace Cosmos {
 			LoadJobsXML ("/Resources/XMLDefs/JobDefs.xml");
 		}
 
-		public static void LoadTextureFolders () {		
+		public static void LoadTextureFolders ()
+		{		
 			LoadTextures ("Textures");
 		}
 
-		public static void LoadTextures (string path) {
+		public static void LoadTextures (string path)
+		{
 			object[] LoadedTextures = LoadPath (path, typeof(Texture2D));
 			foreach (object t in LoadedTextures) {
 				Texture2D tTex = (Texture2D)t;
@@ -46,7 +53,8 @@ namespace Cosmos {
 			}
 		}
 
-		public static object[] LoadPath (string path, System.Type type=null) {
+		public static object[] LoadPath (string path, System.Type type=null)
+		{
 			Debug.Log ("Loading " + path);
 			object[] Obj;
 			if (type == null) {
@@ -60,7 +68,8 @@ namespace Cosmos {
 			return Obj;
 		}
 
-		public static void LoadXML (string path) {
+		public static void LoadXML (string path)
+		{
 			//Load xml doc
 			XmlDocument doc = new XmlDocument ();
 			doc.Load (UnityEngine.Application.dataPath + path);
@@ -91,7 +100,8 @@ namespace Cosmos {
 				}
 			}
 		}
-		public static void LoadJobsXML (string path) {
+		public static void LoadJobsXML (string path)
+		{
 			//Load xml doc
 			XmlDocument doc = new XmlDocument ();
 			doc.Load (UnityEngine.Application.dataPath + path);

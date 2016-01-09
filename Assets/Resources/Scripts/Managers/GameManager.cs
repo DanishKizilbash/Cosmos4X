@@ -26,15 +26,16 @@ namespace Cosmos
 			TextureManager.Init (128);
 			//Initiate render managers
 			DrawManager.Init ();
-			/*
+
 			//Generate/Parse World
-			Gen.WorldGen.Initiate ();			
+			//Gen.WorldGen.Initiate ();			
 			//Initiate Tick Manager
 			TickManager.Init ();
 			//Initiate User Control
 			InputManager.Init ();
 
-			*/
+
+			EntityManager.AddShip ();
 			curGameState = GameState.GameRunning;
 		}
 		public static void PauseGame ()
@@ -48,20 +49,20 @@ namespace Cosmos
 		public static void Update ()
 		{
 			if (curGameState == GameState.GameRunning) {
-				/*
-				 JobManager.Update ();
-			TickManager.Update ();
-			InputManager.Update ();
-				 */
+
+				JobManager.Update ();
+				TickManager.Update ();
+				InputManager.Update ();
+				 
 			}
 		}
 		public static void LateUpdate ()
 		{
 			if (curGameState == GameState.GameRunning) {	
-				/*
+
 				Finder.Update ();
 				DrawManager.Draw ();
-				 */
+
 			}
 			//Profiler.ExposeStrings ();
 

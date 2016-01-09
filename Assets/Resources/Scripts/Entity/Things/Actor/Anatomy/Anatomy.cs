@@ -6,6 +6,8 @@ namespace Cosmos
 {
 	public class Anatomy
 	{
+		public bool Invincible = false;
+		//
 		public Actor Parent;
 		public float MaxLife;
 		public float MaxLimbLife;

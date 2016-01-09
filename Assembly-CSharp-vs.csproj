@@ -69,12 +69,14 @@
      <Compile Include="Assets\Resources\Scripts\Databases\Finder.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\Def.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\DefaultDef.cs" />
+     <Compile Include="Assets\Resources\Scripts\Defs\JobDef.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\ThingDef.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Entity.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Actor.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\ActorHuman.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Anatomy.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Limb.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Ship\ActorShip.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Prop.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Resources\Food\ResourceFood.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Resources\PropResource.cs" />
@@ -86,6 +88,7 @@
      <Compile Include="Assets\Resources\Scripts\Loading\Loader.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\DepthManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\DrawManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\Managers\EntityManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\InputManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\MeshManager.cs" />
@@ -96,6 +99,8 @@
      <Compile Include="Assets\Resources\Scripts\Utility\Parser.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Tickable.cs" />
+     <None Include="Assets\Resources\XMLDefs\ThingDefs.xml" />
+     <None Include="Assets\Resources\XMLDefs\JobDefs.xml" />
      <None Include="Assets\Resources\Shaders\TransparentCutoutDiffuse.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
