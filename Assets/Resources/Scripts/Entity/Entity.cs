@@ -19,6 +19,7 @@ namespace Cosmos
 		public bool selectable = true;
 		public List<Entity> linkedEntities = new List<Entity> ();
 		public bool adoptable = true;
+		public float rotation;
 		public bool isSelected {
 			get {
 				return selected;

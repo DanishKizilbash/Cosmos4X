@@ -11,7 +11,7 @@ namespace Cosmos.AI
 		{
 			Job job = brain.actor.worker.currentJob;
 			if (job != null) {
-				output = job.targetThing.Position;
+				//output = job.targetThing.Position;
 				//brain.actor.Exposer.AddNote ("Current Job Position: " + output);
 				state = State.Success;
 			} else {

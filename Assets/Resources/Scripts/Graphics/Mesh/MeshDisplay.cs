@@ -129,12 +129,9 @@ namespace Cosmos
 		}
 		public void MoveTo (Vector3 Pos)
 		{
-			if (gameObject.transform.position != Pos) {
-				gameObject.transform.position = Pos;
-			}
-			if (entity != null) {
-				gameObject.name = entity.Position.ToString ();
-			}
+			//if (gameObject.transform.position != Pos) {
+			gameObject.transform.position = Pos;
+			//}
 		}
 		public void setScale (float scale)
 		{

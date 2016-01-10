@@ -72,14 +72,17 @@ namespace Cosmos
 		}
 		public static void AddJob (Thing TargetThing, List<string> tasks)
 		{
+			/*
 			if (TargetThing.assignedJob == null) {
 				if (TargetThing.workRequired > 0) {
 					jobQueList.Add (new Job (tasks, TargetThing));
 				}
 			}
+			*/
 		}
 		public static void AddJob (Thing TargetThing, string task)
 		{
+			/*
 			if (TargetThing.assignedJob == null) {
 				if (TargetThing.workRequired > 0) {
 					List<string> tasks = new List<string> ();
@@ -87,6 +90,7 @@ namespace Cosmos
 					jobQueList.Add (new Job (tasks, TargetThing));
 				}
 			}
+			*/
 		}
 	}
 }

@@ -92,9 +92,11 @@
      <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\InputManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\MeshManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\Managers\PhysicsManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TextureManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TickManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\MathI.cs" />
+     <Compile Include="Assets\Resources\Scripts\Physics\PhysicsObject.cs" />
      <Compile Include="Assets\Resources\Scripts\Root.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Parser.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />

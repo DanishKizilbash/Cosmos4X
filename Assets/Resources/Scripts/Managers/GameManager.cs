@@ -34,8 +34,7 @@ namespace Cosmos
 			//Initiate User Control
 			InputManager.Init ();
 
-
-			EntityManager.AddShip ();
+			EntityManager.AddShip (1);
 			curGameState = GameState.GameRunning;
 		}
 		public static void PauseGame ()
@@ -49,7 +48,7 @@ namespace Cosmos
 		public static void Update ()
 		{
 			if (curGameState == GameState.GameRunning) {
-
+				PhysicsManager.Update ();
 				JobManager.Update ();
 				TickManager.Update ();
 				InputManager.Update ();

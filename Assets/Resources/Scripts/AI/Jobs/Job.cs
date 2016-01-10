@@ -12,13 +12,13 @@ namespace Cosmos
 				return tasks [0];
 			}
 		}
-		public Thing targetThing;
+		//public Thing targetThing;
 		public Worker assignedWorker;
 		public Job (List<string> RequiredTasks, Thing TargetThing)
 		{
 			tasks = RequiredTasks;
-			targetThing = TargetThing;
-			targetThing.assignedJob = this;
+			//targetThing = TargetThing;
+			//targetThing.assignedJob = this;
 			//targetThing.Exposer.AddPersistent (this);
 		}
 		public void AssignWorker (Worker AssignedWorker)
@@ -35,7 +35,7 @@ namespace Cosmos
 		{
 			if (state != JobState.Success) {
 				state = JobState.Working;
-				targetThing.Work (Amount);
+				//targetThing.Work (Amount);
 			}
 		}
 		public void ReportWorkSuccess ()
@@ -47,7 +47,7 @@ namespace Cosmos
 		{			
 			assignedWorker.ReportSuccess ();
 			assignedWorker = null;
-			targetThing.assignedJob = null;
+			//targetThing.assignedJob = null;
 			JobManager.AddJobToRemovalList (this);
 			//targetThing.Exposer.RemovePersistent (this);
 		}

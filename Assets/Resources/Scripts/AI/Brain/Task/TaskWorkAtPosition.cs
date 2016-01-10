@@ -17,7 +17,7 @@ namespace Cosmos.AI
 		{
 			if (targetThing == null) {
 				currentJob = brain.actor.worker.currentJob;
-				targetThing = currentJob.targetThing;
+				//targetThing = currentJob.targetThing;
 			}
 			state = State.Running;
 			if (currentJob.state == JobState.Success || currentJob == null) {
