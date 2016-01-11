@@ -73,9 +73,12 @@ namespace Cosmos
 		}
 		public void ApplyUpdate ()
 		{
-			if (UpdateRequired) {
-				mesh.uv = cachedUV;
-				UpdateRequired = false;
+			if (entity != null) {
+				Rotate ();
+				if (UpdateRequired) {
+					mesh.uv = cachedUV;
+					UpdateRequired = false;
+				}
 			}
 		}
 		private void BuildMesh ()
@@ -131,7 +134,16 @@ namespace Cosmos
 		{
 			//if (gameObject.transform.position != Pos) {
 			gameObject.transform.position = Pos;
+
 			//}
+		}
+		public void Rotate ()
+		{
+			float curRot = gameObject.transform.rotation.eulerAngles.z;
+			float rotDiff = entity.rotation - curRot;
+			//Debug.Log (entity.rotation);
+			//Debug.Log (curRot + " vs " + entity.rotation + " : " + rotDiff);
+			gameObject.transform.RotateAround (entity.rotationPoint, Vector3.forward, rotDiff);
 		}
 		public void setScale (float scale)
 		{

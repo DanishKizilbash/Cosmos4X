@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Cosmos
@@ -13,7 +14,7 @@ namespace Cosmos
 		{
 			Entity tEntity = base.Init (defID);
 			Drops = ((ThingDef)def).drops;
-			physicsObject = new PhysicsObject (this);
+			physicsObject = new PhysicsObject (this, new Vector3 (1, 1, 1));
 			return tEntity;
 		}
 		public override void Destroy ()

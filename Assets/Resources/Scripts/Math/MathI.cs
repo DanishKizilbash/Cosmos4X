@@ -57,5 +57,18 @@ namespace Cosmos
 		{
 			return a > b ? a : b;
 		}
+		public static Vector3 RotatePoint (float x, float y, float z, float rotation)
+		{
+			float rot = rotation * Mathf.Deg2Rad;
+			float xP = y * Mathf.Cos (rot) - x * Mathf.Sin (rot);
+			float yP = y * Mathf.Sin (rot) + x * Mathf.Cos (rot);
+
+			return new Vector3 (xP, yP, 0);
+		}
+		public static Vector3 RotatePoint (Vector3 point, float rotation)
+		{
+			return RotatePoint (point.x, point.y, point.z, rotation);
+			
+		}
 	}
 }

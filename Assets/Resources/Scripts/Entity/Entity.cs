@@ -20,6 +20,7 @@ namespace Cosmos
 		public List<Entity> linkedEntities = new List<Entity> ();
 		public bool adoptable = true;
 		public float rotation;
+		public Vector3 rotationPoint;
 		public bool isSelected {
 			get {
 				return selected;
@@ -32,11 +33,6 @@ namespace Cosmos
 				}	
 				selected = value;
 			}
-		}
-		//	
-		public virtual Vector3 TrueCenter ()
-		{
-			return Position + new Vector3 (MainGraphic.scale / 2, 0, MainGraphic.scale / 2);
 		}
 		public virtual Vector3 Position {
 			get {

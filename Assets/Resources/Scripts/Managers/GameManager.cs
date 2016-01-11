@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Cosmos
 {
@@ -14,6 +15,7 @@ namespace Cosmos
 		}
 		public static GameState curGameState = GameState.MainMenu;		
 		public static Vector3 screenPos = new Vector3 (0, 0, 0);
+		public static List<ActorShip> ships;
 
 		public static void NewGame (float Seed, Vector3 MapSize)
 		{
@@ -34,7 +36,7 @@ namespace Cosmos
 			//Initiate User Control
 			InputManager.Init ();
 
-			EntityManager.AddShip (1);
+			ships = EntityManager.AddShip (1);
 			curGameState = GameState.GameRunning;
 		}
 		public static void PauseGame ()
@@ -47,7 +49,13 @@ namespace Cosmos
 		}
 		public static void Update ()
 		{
+			
 			if (curGameState == GameState.GameRunning) {
+				
+				foreach (ActorShip ship in ships) {
+					ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.001f, 0), new Vector3 (0.5f, -0.5f, 0));
+					ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.001f, 0), new Vector3 (1.5f, -0.5f, 0));
+				}
 				PhysicsManager.Update ();
 				JobManager.Update ();
 				TickManager.Update ();
