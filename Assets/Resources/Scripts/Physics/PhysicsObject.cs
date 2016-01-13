@@ -21,7 +21,7 @@ namespace Cosmos
 				float fixedRot = Mathf.Deg2Rad * ((thing.rotation + 90) % 360);
 				float xComp = Mathf.Cos (fixedRot);
 				float yComp = Mathf.Sin (fixedRot);
-				return new Vector3 (xComp, yComp, 0).normalized;
+				return new Vector3 (xComp, yComp, 0);
 			}
 		}
 		public PhysicsObject (Thing target, Vector3 Dimensions, float Mass =100f)
@@ -44,15 +44,8 @@ namespace Cosmos
 			ApplyThrust (new Vector3 (x, y, z), offset, relativeToRotation);
 		}
 		public void ApplyThrust (Vector3 thrustVector, Vector3 offset, bool relativeToRotation=true)
-		{
-			//float angularPercentage = centerOfMass - offset;
-			//velocity += thrustVector;
-			if (relativeToRotation) {
-				float thrustMagnitude = thrustVector.magnitude;
-				thrustVector = directionVector * thrustMagnitude;
-				Debug.Log ("Thrust with magnitude(x100) " + (thrustMagnitude * 100) + " applied with direction Vector " + directionVector + " = Thrust Vector (x100) " + (thrustVector * 100));
-			}
-			ComputeForceAndTorque (thrustVector, offset);
+		{			
+			ComputeForceAndTorque (thrustVector, offset, relativeToRotation);
 		}
 		public void UpdatePosition ()
 		{
@@ -72,18 +65,25 @@ namespace Cosmos
 			//COM
 			Debug.DrawLine (centerOfMass + thing.Position + Vector3.up * 0.1f, centerOfMass + thing.Position - Vector3.up * 0.1f, Color.blue);
 			Debug.DrawLine (centerOfMass + thing.Position + Vector3.left * 0.1f, centerOfMass + thing.Position - Vector3.left * 0.1f, Color.blue);
-			Debug.Log ("Velocity(x100) : " + (velocity * 100) + " || Angular Velocity(x100) " + (angularVelocity * 100));
+			//Debug.Log ("Velocity(x100) : " + (velocity * 100) + " || Angular Velocity(x100) " + (angularVelocity * 100));
 		}
-		void ComputeForceAndTorque (Vector3 force, Vector3 point)
+		void ComputeForceAndTorque (Vector3 force, Vector3 point, bool relativeToRotation)
 		{		
-			Vector3 offset = centerOfMass - point;
-			Vector3 torque = Vector3.Cross (offset, force);
-			Debug.Log (offset + " offset with force : " + force + " and MOA : " + momentOfInertia + " = torque " + torque * 100);
+			Vector3 torque = Vector3.Cross (point, force);
+			//Debug.Log ("force(x100) : " + (force * 100) + ", Offset " + (point) + " and MOA : " + momentOfInertia + " = torque " + torque * 100);
+
+			Vector3 tPt = MathI.RotateVector (centerOfMass + point + thing.Position, thing.Position + centerOfMass, thing.rotation);
+
+			if (relativeToRotation) {
+				force = MathI.RotateVector (force, Vector3.zero, thing.rotation);
+				point = MathI.RotateVector (point, centerOfMass, thing.rotation);
+			}
 			velocity += force / mass;
 			angularVelocity += torque / momentOfInertia;
-			//point = MathI.RotatePoint (point, thing.rotation);
-			//Thrust
-			Debug.DrawLine (point + thing.Position, point + thing.Position + (force * 100), Color.red);
+
+			//Force
+
+			Debug.DrawLine (tPt, tPt - (force * 50), Color.red);
 		}
 
 		private void ApplyFriction ()
@@ -103,7 +103,7 @@ namespace Cosmos
 		}
 		private void CalculateCenterOfMass ()
 		{
-			centerOfMass = new Vector3 (1f, 0f, 0.0f);
+			centerOfMass = new Vector3 (0.5f, -0.5f, 0.0f);
 			thing.rotationPoint = centerOfMass;
 		}
 	}

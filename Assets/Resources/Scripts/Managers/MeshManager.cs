@@ -50,8 +50,7 @@ namespace Cosmos
 			MeshDisplay tMeshDisp = entity.meshDisplay;
 			tMeshDisp.setVisibility (entity.isVisible);
 			if (entity.isVisible) {
-				tMeshDisp.MoveTo (entity.ScreenPosition);
-				tMeshDisp.setScale (graphic.scale);
+				tMeshDisp.UpdatePosition ();
 				if (overrideVector == default(Vector2)) {
 					tMeshDisp.UpdateUV (0, 0, graphic.atlasVector);
 				} else {

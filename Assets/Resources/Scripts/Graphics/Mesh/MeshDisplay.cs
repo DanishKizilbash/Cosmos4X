@@ -74,6 +74,9 @@ namespace Cosmos
 		public void ApplyUpdate ()
 		{
 			if (entity != null) {
+				if (gameObject.name != entity.Name) {
+					gameObject.name = entity.Name;
+				}
 				Rotate ();
 				if (UpdateRequired) {
 					mesh.uv = cachedUV;
@@ -130,11 +133,10 @@ namespace Cosmos
 		{
 			gameObject.SetActive (visible);
 		}
-		public void MoveTo (Vector3 Pos)
+		public void UpdatePosition ()
 		{
 			//if (gameObject.transform.position != Pos) {
-			gameObject.transform.position = Pos;
-
+			gameObject.transform.position = MathI.RotateVector (entity.Position, entity.Position + entity.rotationPoint, entity.rotation);
 			//}
 		}
 		public void Rotate ()
@@ -143,10 +145,11 @@ namespace Cosmos
 			float rotDiff = entity.rotation - curRot;
 			//Debug.Log (entity.rotation);
 			//Debug.Log (curRot + " vs " + entity.rotation + " : " + rotDiff);
-			gameObject.transform.RotateAround (entity.rotationPoint, Vector3.forward, rotDiff);
+			gameObject.transform.Rotate (Vector3.forward, rotDiff);
 		}
-		public void setScale (float scale)
+		public void UpdateScale ()
 		{
+			float scale = entity.MainGraphic.scale;
 			Vector3 scaleVec = new Vector3 (scale, scale, scale);
 			if (gameObject.transform.localScale != scaleVec) {
 				gameObject.transform.position = scaleVec;
