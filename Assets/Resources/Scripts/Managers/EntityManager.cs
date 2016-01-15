@@ -18,5 +18,15 @@ namespace Cosmos
 			}
 			return ships;
 		}
+		public static List<PlanetarySystem> AddPlanetarySystem (int qty=1, Coord coord=null)
+		{
+			List<PlanetarySystem> systems = new List<PlanetarySystem> ();
+			for (int i =0; i<qty; i++) {
+				PlanetarySystem sys;
+				sys = new PlanetarySystem ();
+				systems.Add (sys);
+			}
+			return systems;
+		}
 	}
 }

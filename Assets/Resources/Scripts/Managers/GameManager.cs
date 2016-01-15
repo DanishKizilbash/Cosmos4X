@@ -35,7 +35,8 @@ namespace Cosmos
 			TickManager.Init ();
 			//Initiate User Control
 			InputManager.Init ();
-
+			//Create Galaxy
+			GalaxyManager.Init ();
 			ships = EntityManager.AddShip (1);
 			curGameState = GameState.GameRunning;
 		}

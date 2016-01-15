@@ -57,6 +57,16 @@ namespace Cosmos
 		{
 			return a > b ? a : b;
 		}
+		public static int GenSeed (int size)
+		{
+			int seed = 0;
+			string seedArray = "";
+			for (int i=0; i<size; i++) {
+				seedArray += Mathf.Ceil (Random.value * 9).ToString ();
+			}
+			seed = Parser.StringToInt (seedArray);
+			return seed;
+		}
 		public static Vector3 RotateVector (float x, float y, float z, Vector3 rotationPoint, float rotation)
 		{
 			float rot = (rotation % 360) * Mathf.Deg2Rad;
@@ -73,8 +83,11 @@ namespace Cosmos
 		}
 		public static Vector3 RotateVector (Vector3 point, Vector3 rotationPoint, float rotation)
 		{
-			return RotateVector (point.x, point.y, point.z, rotationPoint, rotation);
-			
+			return RotateVector (point.x, point.y, point.z, rotationPoint, rotation);			
+		}
+		public static float SphereVolume (float radius)
+		{
+			return 4 / 3 * Mathf.PI * Mathf.Pow (radius, 3);
 		}
 	}
 }

@@ -71,6 +71,10 @@
      <Compile Include="Assets\Resources\Scripts\Defs\DefaultDef.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\JobDef.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\ThingDef.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBodies\StarBody.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBody.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\OrbitEntity.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\PlanetarySystem.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Entity.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Actor.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\ActorHuman.cs" />
@@ -89,12 +93,15 @@
      <Compile Include="Assets\Resources\Scripts\Managers\DepthManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\DrawManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\EntityManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\Managers\GalaxyManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\InputManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\MeshManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\PhysicsManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TextureManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TickManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\Math\Coord.cs" />
+     <Compile Include="Assets\Resources\Scripts\Math\LoadedDie.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\MathI.cs" />
      <Compile Include="Assets\Resources\Scripts\Physics\PhysicsObject.cs" />
      <Compile Include="Assets\Resources\Scripts\Root.cs" />
@@ -102,6 +109,7 @@
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Tickable.cs" />
      <None Include="Assets\Resources\XMLDefs\ThingDefs.xml" />
+     <None Include="Assets\Resources\XMLDefs\StarDefs.xml" />
      <None Include="Assets\Resources\XMLDefs\JobDefs.xml" />
      <None Include="Assets\Resources\Shaders\TransparentCutoutDiffuse.shader" />
  <Reference Include="UnityEngine.UI">

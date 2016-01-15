@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CelestialBody>
+	<Star>
+		<Flora>
+		  <PineTree>
+		    <TextureID>Flora_PineTree</TextureID>		   
+		    <Life>20</Life>
+		    <RequiredLight>10</RequiredLight>
+		    <WorkRequired>60</WorkRequired>
+		     <Drops>Resource_PineWood:ResourceWood:2</Drops>
+		  </PineTree>		  
+		</Flora>
+	</Star>
+</CelestialBody>
