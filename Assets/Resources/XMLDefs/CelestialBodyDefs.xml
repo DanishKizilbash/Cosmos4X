@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CelestialBody>
+	<Star>
+		<M>
+		  <Default>
+		    <TextureID>Star_M1</TextureID>		   
+		  </Default>		  
+		</M>
+	</Star>
+	<Planet>
+		<Ocean>
+		  <Default>
+		    <TextureID>Planet_Ocean1</TextureID>		   
+		  </Default>		  
+		</Ocean>
+	</Planet>
+</CelestialBody>

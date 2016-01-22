@@ -13,6 +13,7 @@ namespace Cosmos
 		public static GameObject MainCamera;
 		public static Vector2 CameraPos = new Vector2 (0, 0);
 		public static Vector2 TargetCameraPos = new Vector2 (0, 0);
+		public static float TargetSize = 1f;
 		public static float CameraEase = 0.1f;
 		public static Vector2 DisplaySize;
 
@@ -62,6 +63,8 @@ namespace Cosmos
 			CameraPos += (TargetCameraPos - CameraPos) * CameraEase;
 			//Debug.Log (CameraPos);
 			Camera.main.transform.position = new Vector3 (CameraPos.x, CameraPos.y, -1);
+			TargetSize = GameManager.currentGame.currentZoomScale;
+			Camera.main.orthographicSize = Mathf.SmoothStep (Camera.main.orthographicSize, TargetSize, 0.25f);
 		}
 		public static void MoveCameraBy (Vector2 amount)
 		{

@@ -15,8 +15,7 @@ namespace Cosmos
 		}
 		public static GameState curGameState = GameState.MainMenu;		
 		public static Vector3 screenPos = new Vector3 (0, 0, 0);
-		public static List<ActorShip> ships;
-		static int dir = 1;
+		public static Game currentGame;
 		public static void NewGame (float Seed, Vector3 MapSize)
 		{
 
@@ -37,7 +36,8 @@ namespace Cosmos
 			InputManager.Init ();
 			//Create Galaxy
 			GalaxyManager.Init ();
-			ships = EntityManager.AddShip (1);
+			currentGame = new Game ();
+			currentGame.Start ();
 			curGameState = GameState.GameRunning;
 		}
 		public static void PauseGame ()
@@ -50,31 +50,13 @@ namespace Cosmos
 		}
 		public static void Update ()
 		{
-			if (Random.Range (0, 100) > 98) {
-				if (dir == 1) {
-					dir = 2;
-				} else {
-					dir = 1;
-				}
-			}
 			if (curGameState == GameState.GameRunning) {
-				foreach (ActorShip ship in ships) {
-					if (dir == 1) {
-						ship.physicsObject.ApplyThrust (new Vector3 (0.01f, 0.0f, 0), new Vector3 (-0.5f, 0.5f, 0));
-					} else {
-						ship.physicsObject.ApplyThrust (new Vector3 (-0.01f, 0.0f, 0), new Vector3 (0.5f, 0.5f, 0));
-
-					}
-					ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.05f, 0), new Vector3 (0.5f, -0.5f, 0));
-					ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.05f, 0), new Vector3 (-0.5f, -0.5f, 0));
-				}
+				PhysicsManager.Update ();
+				JobManager.Update ();
+				TickManager.Update ();
+				currentGame.Update ();
 			}
-			PhysicsManager.Update ();
-			JobManager.Update ();
-			TickManager.Update ();
 			InputManager.Update ();
-				 
-
 		}
 		public static void LateUpdate ()
 		{

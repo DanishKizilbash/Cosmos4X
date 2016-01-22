@@ -149,10 +149,10 @@ namespace Cosmos
 		}
 		public void UpdateScale ()
 		{
-			float scale = entity.MainGraphic.scale;
-			Vector3 scaleVec = new Vector3 (scale, scale, scale);
+			Vector2 scale = entity.scale;
+			Vector3 scaleVec = new Vector3 (MathI.RationalizeFloat (scale.x, 4), MathI.RationalizeFloat (scale.y, 4), 0);
 			if (gameObject.transform.localScale != scaleVec) {
-				gameObject.transform.position = scaleVec;
+				gameObject.transform.localScale = scaleVec;
 			}
 		}
 		public void setColor (Color color)

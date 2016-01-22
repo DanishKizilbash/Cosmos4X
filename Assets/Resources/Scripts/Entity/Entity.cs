@@ -8,7 +8,8 @@ namespace Cosmos
 	{
 		public string cachedDefID = "";
 		private Vector3 position = Vector3.zero;
-		private Graphic graphic;		
+		private Graphic graphic;	
+		private Vector2 cachedScale = Vector2.one;
 		public MeshDisplay meshDisplay;
 		private string name;
 		public Def def;
@@ -21,6 +22,8 @@ namespace Cosmos
 		public bool adoptable = true;
 		public float rotation;
 		public Vector3 rotationPoint;
+		//
+		public PlanetarySystem system;
 		public bool isSelected {
 			get {
 				return selected;
@@ -44,11 +47,10 @@ namespace Cosmos
 		}
 		public virtual Vector3 Center {
 			get {
-				Vector3 pos = Position;
-				float scale = graphic.scale;
+				Vector3 pos = position;
 				Vector3 tileCenter = new Vector3 (0, 0, pos.z);
-				tileCenter.x = pos.x + scale / 2f;//Left+halfX
-				tileCenter.y = pos.y + scale / 2f;//Bottom +halfY
+				tileCenter.x = pos.x + scale.x / 2f;//Left+halfX
+				tileCenter.y = pos.y + scale.y / 2f;//Bottom +halfY
 				return tileCenter;
 			}
 		}
@@ -57,6 +59,17 @@ namespace Cosmos
 
 				return Center;
 
+			}
+		}
+		public Vector2 scale {
+			get {
+				return cachedScale;
+			}
+			set {
+				cachedScale = value;
+				if (meshDisplay != null) {
+					meshDisplay.UpdateScale ();
+				}
 			}
 		}
 		public virtual Graphic MainGraphic {
@@ -114,12 +127,15 @@ namespace Cosmos
 		public virtual Entity Init (string defID)
 		{
 			//Exposer = new Exposable (this);
+			system = GameManager.currentGame.currentSystem;
+			system.AddEntity (this);
 			getDef (defID);
 			if (def == null) {
 				return null;
 			}
 			Name = String.Join ("", new string[]{def.ID,Finder.GlobalCount.ToString ()});
 			getGraphics ();
+			scale = MainGraphic.scale;
 			SetAttributes ();
 			if (Interval == 0) {
 				Interval = 60;
@@ -192,7 +208,7 @@ namespace Cosmos
 		public virtual void Destroy ()
 		{
 			OnSelected (false);
-
+			system.RemoveEntity (this);
 			MeshManager.CleanMeshDisplay (meshDisplay);
 			TickManager.RemoveTicker (this);
 			Finder.RemoveAllInstancesOf (this);
@@ -210,8 +226,19 @@ namespace Cosmos
 		public virtual void SetLateAttributes ()
 		{
 		}
+		public virtual void ChangeSystem (PlanetarySystem newSystem)
+		{
+			system.RemoveEntity (this);
+			newSystem.AddEntity (this);
+			system = newSystem;
+		}
+		public virtual void Print ()
+		{
+			Debug.Log ("----Printing attributes of Entity : " + name + "----");
+		}
 		public abstract string DefaultID ();
 		//
+
 		public override string ToString ()
 		{
 			return Name;

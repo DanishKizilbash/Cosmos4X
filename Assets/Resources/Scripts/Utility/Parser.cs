@@ -23,6 +23,22 @@ namespace Cosmos
 			//
 			return new Vector3 (x, y, z);
 		}
+		public static Vector3 StringToVector2 (string str)
+		{
+			if (!str.StartsWith ("(")) {
+				return new Vector2 (float.MaxValue, float.MaxValue);
+			}
+			float x;
+			float y;
+			
+			//(0.0, 0.0, 0.0)
+			string[] seperators = new string[] {",","(",")"};
+			string[] strings = str.Split (seperators, System.StringSplitOptions.None);
+			float.TryParse (strings [1], out x);
+			float.TryParse (strings [2], out y);
+			//
+			return new Vector2 (x, y);
+		}
 		public static int StringToInt (string str)
 		{
 			int val = 0;

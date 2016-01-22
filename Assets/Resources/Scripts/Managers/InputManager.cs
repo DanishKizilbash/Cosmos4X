@@ -33,6 +33,13 @@ namespace Cosmos
 			if (Input.GetMouseButtonDown (0)) {
 
 			}
+			float d = Input.GetAxis ("Mouse ScrollWheel");
+			if (d > 0f) {
+				GameManager.currentGame.zoom--;
+				//GameManager.viewScale;
+			} else if (d < 0f) {
+				GameManager.currentGame.zoom++;
+			}
 		}
 		public static  void SelectEntities (List<string> SelectionFilters=null)
 		{
@@ -54,16 +61,16 @@ namespace Cosmos
 		public static void ActOnKeys ()
 		{
 			if (IsKeyDown ("W")) {
-				DrawManager.MoveCameraBy (new Vector2 (0.0f, 1.0f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (0.0f, 1.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
 			}
 			if (IsKeyDown ("S")) {
-				DrawManager.MoveCameraBy (new Vector2 (0.0f, -1.0f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (0.0f, -1.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
 			}
 			if (IsKeyDown ("A")) {
-				DrawManager.MoveCameraBy (new Vector2 (-1.0f, 0.0f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (-1.0f, 0.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
 			}
 			if (IsKeyDown ("D")) {
-				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed);
+				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
 			}
 			if (IsKeyDown ("SPACE")) {
 				TickManager.SwitchPauseState ();
@@ -97,6 +104,18 @@ namespace Cosmos
 					}
 				}
 			}
+			if (IsKeyDown ("PAGEUP")) {
+				GameManager.currentGame.ChangeSystem (GameManager.currentGame.currentSystemID + 1);
+				Debug.Log (GameManager.currentGame.currentSystemID);
+				//Debug.Log (GalaxyManager.currentSystem.name);
+				RemoveKey ("PAGEUP");
+			}
+			if (IsKeyDown ("PAGEDOWN")) {
+				GameManager.currentGame.ChangeSystem (GameManager.currentGame.currentSystemID - 1);
+				Debug.Log (GameManager.currentGame.currentSystemID);
+				//Debug.Log (GalaxyManager.currentSystem.name);
+				RemoveKey ("PAGEDOWN");
+			}
 
 		}
 		public  static void CheckKeyDown ()
@@ -125,6 +144,12 @@ namespace Cosmos
 			if (Input.GetKeyDown (KeyCode.E)) {
 				AddKey ("E");
 			}
+			if (Input.GetKeyDown (KeyCode.PageUp)) {
+				AddKey ("PAGEUP");
+			}
+			if (Input.GetKeyDown (KeyCode.PageDown)) {
+				AddKey ("PAGEDOWN");
+			}
 		}
 		public static void CheckKeyUp ()
 		{
@@ -151,6 +176,12 @@ namespace Cosmos
 			}	
 			if (Input.GetKeyUp (KeyCode.E)) {
 				RemoveKey ("E");
+			}
+			if (Input.GetKeyUp (KeyCode.PageUp)) {
+				RemoveKey ("PAGEUP");
+			}
+			if (Input.GetKeyUp (KeyCode.PageDown)) {
+				RemoveKey ("PAGEDOWN");
 			}
 		}
 		public static void AddKey (string key)

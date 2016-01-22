@@ -60,7 +60,13 @@ namespace Cosmos
 				List<Texture2D> curTexList = Finder.TextureDatabase.GetTexturesOfType (cat);
 				textures.Add (cat, curTexList);
 				Debug.Log (textures [cat].Count + " " + cat + "s found");
-				SpriteAtlas curSpriteAtlas = new SpriteAtlas (TileSize, cat + "Atlas");
+				int maxWidth = 1;
+				foreach (Texture2D tex in curTexList) {
+					if (tex.width > maxWidth) {
+						maxWidth = tex.width;
+					}
+				}
+				SpriteAtlas curSpriteAtlas = new SpriteAtlas (maxWidth, cat + "Atlas");
 				curSpriteAtlas.AddTextureList (curTexList);
 				spriteAtlases.Add (cat, curSpriteAtlas);
 				curSpriteAtlas.Init ();

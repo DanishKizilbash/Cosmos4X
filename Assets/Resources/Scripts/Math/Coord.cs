@@ -4,8 +4,8 @@ namespace Cosmos
 {
 	public class Coord
 	{
-		public Vector2 pos;
-		public Vector2 sector;
+		public Vector2 pos;//Light Days - 365Max
+		public Vector2 sector;//Light Years - 100max
 
 		public Coord (float X, float Y, float SectorX, float SectorY)
 		{
@@ -20,6 +20,13 @@ namespace Cosmos
 			pos.y = Pos.y;
 			sector.x = Sector.x;
 			sector.y = Sector.y;
+		}
+		public Vector3 vector {
+			get {
+				float x = pos.x + UnitConversion.Distance.LightYear.Value (sector.x, UnitConversion.Distance.LightDay);
+				float y = pos.y + UnitConversion.Distance.LightYear.Value (sector.y, UnitConversion.Distance.LightDay);
+				return new Vector3 (x, y, 0);
+			}
 		}
 	}
 }

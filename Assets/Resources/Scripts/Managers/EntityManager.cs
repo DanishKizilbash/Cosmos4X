@@ -23,7 +23,7 @@ namespace Cosmos
 			List<PlanetarySystem> systems = new List<PlanetarySystem> ();
 			for (int i =0; i<qty; i++) {
 				PlanetarySystem sys;
-				sys = new PlanetarySystem ();
+				sys = new PlanetarySystem (coord);
 				systems.Add (sys);
 			}
 			return systems;

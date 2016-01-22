@@ -71,6 +71,7 @@
      <Compile Include="Assets\Resources\Scripts\Defs\DefaultDef.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\JobDef.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\ThingDef.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBodies\PlanetBody.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBodies\StarBody.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBody.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\OrbitEntity.cs" />
@@ -86,6 +87,7 @@
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Resources\PropResource.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Thing.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Utility Classes\Drop.cs" />
+     <Compile Include="Assets\Resources\Scripts\Game.cs" />
      <Compile Include="Assets\Resources\Scripts\Graphics\Graphic.cs" />
      <Compile Include="Assets\Resources\Scripts\Graphics\Mesh\MeshDisplay.cs" />
      <Compile Include="Assets\Resources\Scripts\Graphics\Texture\SpriteAtlas.cs" />
@@ -103,13 +105,16 @@
      <Compile Include="Assets\Resources\Scripts\Math\Coord.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\LoadedDie.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\MathI.cs" />
+     <Compile Include="Assets\Resources\Scripts\Math\Measurement\Unit.cs" />
+     <Compile Include="Assets\Resources\Scripts\Math\Measurement\UnitConversions.cs" />
+     <Compile Include="Assets\Resources\Scripts\Math\MinMax.cs" />
      <Compile Include="Assets\Resources\Scripts\Physics\PhysicsObject.cs" />
      <Compile Include="Assets\Resources\Scripts\Root.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Parser.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Tickable.cs" />
      <None Include="Assets\Resources\XMLDefs\ThingDefs.xml" />
-     <None Include="Assets\Resources\XMLDefs\StarDefs.xml" />
+     <None Include="Assets\Resources\XMLDefs\CelestialBodyDefs.xml" />
      <None Include="Assets\Resources\XMLDefs\JobDefs.xml" />
      <None Include="Assets\Resources\Shaders\TransparentCutoutDiffuse.shader" />
  <Reference Include="UnityEngine.UI">

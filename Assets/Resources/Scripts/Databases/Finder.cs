@@ -151,13 +151,6 @@ namespace Cosmos
 				Graphic value = (Graphic)val;
 				if (value == null && !skipCreateNew) {
 					value = new Graphic (def.GetAttribute ("TextureID"));
-					//
-					string scale = def.GetAttribute ("Scale");
-					if (scale == "") {
-						scale = "1";
-					}
-					value.scale = float.Parse (scale);
-					//
 				}
 				return value;
 			}

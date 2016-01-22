@@ -89,5 +89,12 @@ namespace Cosmos
 		{
 			return 4 / 3 * Mathf.PI * Mathf.Pow (radius, 3);
 		}
+		public static float RationalizeFloat (float value, int digits)
+		{
+			float magnitude = Mathf.Pow (10, digits);
+			float result = Mathf.Floor (value * magnitude);
+			result /= magnitude;
+			return result;
+		}
 	}
 }

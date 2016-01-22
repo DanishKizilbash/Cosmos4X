@@ -1,26 +1,27 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBody.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Scripts\Managers\InputManager.cs">
     <Files>
-      <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\PlanetarySystem.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBody.cs" Line="1" Column="1" />
+      <File FileName="Assets\Resources\Scripts\Game.cs" Line="75" Column="25" />
+      <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\PlanetarySystem.cs" Line="18" Column="23" />
+      <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBody.cs" Line="24" Column="25" />
       <File FileName="Assets\Resources\Scripts\Root.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Managers\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Managers\InputManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Managers\PhysicsManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Entity\Entity.cs" Line="1" Column="1" />
+      <File FileName="Assets\Resources\Scripts\Managers\GameManager.cs" Line="40" Column="25" />
+      <File FileName="Assets\Resources\Scripts\Entity\Entity.cs" Line="229" Column="58" />
       <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\OrbitEntity.cs" Line="1" Column="1" />
+      <File FileName="Assets\Resources\Scripts\Managers\GalaxyManager.cs" Line="72" Column="22" />
+      <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBodies\StarBody.cs" Line="1" Column="1" />
+      <File FileName="Assets\Resources\Scripts\Math\Measurement\UnitConversions.cs" Line="9" Column="60" />
+      <File FileName="Assets\Resources\Scripts\Entity\CelestialBody\CelestialBodies\PlanetBody.cs" Line="1" Column="1" />
       <File FileName="Assets\Resources\Scripts\Math\Coord.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Math\LoadedDie.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\Scripts\Managers\GalaxyManager.cs" Line="17" Column="5" />
+      <File FileName="Assets\Resources\Scripts\Managers\EntityManager.cs" Line="26" Column="39" />
+      <File FileName="Assets\Resources\Scripts\Managers\InputManager.cs" Line="84" Column="30" />
+      <File FileName="Assets\Resources\Scripts\Managers\DrawManager.cs" Line="66" Column="57" />
+      <File FileName="Assets\Resources\Scripts\Math\Measurement\Unit.cs" Line="28" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="D:\Git\Game Dev\Cosmos4X\Assets\Assets\Scripts\Root.cs" line="12" />
-      <Breakpoint file="D:\Git\Game Dev\Cosmos4X\Assets\Assets\Scripts\Managers\GameManager.cs" line="24" />
-      <Breakpoint file="D:\Git\Game Dev\Cosmos4X\Assets\Assets\Scripts\Loading\Loader.cs" line="39" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

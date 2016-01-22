@@ -5,16 +5,19 @@ namespace Cosmos
 	public class StarBody : CelestialBody
 	{
 		public StellarClass stellarClass;
-
-		public override void SetAttributes ()
+		public float luminosity;
+		public StellarColor color;
+		public override void Print ()
 		{
-			base.SetAttributes ();
-			attributes.Add (0, "Luminosity");
-			attributes.Add ("", "Color");
+			base.Print ();
+			Debug.Log ("Stellar Class: " + stellarClass);
+			Debug.Log ("Luminosity:" + luminosity);
+			Debug.Log ("Color:" + color);
+			orbit.Print ();
 		}
 		public override string DefaultID ()
 		{
-			return "";
+			return "CelestialBody_Star_M_Default";
 		}
 	}
 
