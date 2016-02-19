@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using Vectrosity;
 namespace Cosmos
 {
 	public abstract class Entity:Tickable
@@ -16,12 +17,17 @@ namespace Cosmos
 		public bool isDestroyed = false;
 		public bool isVisible = true;
 		public bool isInitiated = false;
+		//
 		private bool selected = false;
 		public bool selectable = true;
+		private VectorLine selectedLine;
+		//
 		public List<Entity> linkedEntities = new List<Entity> ();
 		public bool adoptable = true;
 		public float rotation;
 		public Vector3 rotationPoint;
+		//
+		public Stockpile stockpile;
 		//
 		public PlanetarySystem system;
 		public bool isSelected {
@@ -29,11 +35,7 @@ namespace Cosmos
 				return selected;
 			}
 			set {
-				if (!selected) {
-					OnSelected (true);
-				} else {						
-					OnSelected (false);	
-				}	
+				OnSelected (value);
 				selected = value;
 			}
 		}
@@ -50,7 +52,7 @@ namespace Cosmos
 				Vector3 pos = position;
 				Vector3 tileCenter = new Vector3 (0, 0, pos.z);
 				tileCenter.x = pos.x + scale.x / 2f;//Left+halfX
-				tileCenter.y = pos.y + scale.y / 2f;//Bottom +halfY
+				tileCenter.y = pos.y - scale.y / 2f;//Bottom +halfY
 				return tileCenter;
 			}
 		}
@@ -70,6 +72,11 @@ namespace Cosmos
 				if (meshDisplay != null) {
 					meshDisplay.UpdateScale ();
 				}
+			}
+		}
+		public Rect bounds {
+			get {
+				return new Rect (Position.x, Position.y, scale.x * 2, scale.y * 2);
 			}
 		}
 		public virtual Graphic MainGraphic {
@@ -119,10 +126,22 @@ namespace Cosmos
 		public virtual void OnSelected (bool selected)
 		{
 			if (selected) {
-							
+				if (!Finder.SelectedEntities.Contains (this)) {
+					Finder.SelectedEntities.Add (this);
+					selectedLine.active = true;
+					drawSelectedLine ();
+				}
 			} else {
-
+				Finder.SelectedEntities.Remove (this);
+				selectedLine.active = false;
+				selectedLine.StopDrawing3DAuto ();
 			}
+		}
+		private void drawSelectedLine ()
+		{
+			float rad = scale.x > scale.y ? scale.x / 2 : scale.y / 2;
+			selectedLine.MakeCircle (Center, rad);	
+			selectedLine.Draw3DAuto ();
 		}
 		public virtual Entity Init (string defID)
 		{
@@ -133,7 +152,11 @@ namespace Cosmos
 			if (def == null) {
 				return null;
 			}
-			Name = String.Join ("", new string[]{def.ID,Finder.GlobalCount.ToString ()});
+			string id = def.ID;
+			if (id == "") {
+				id = "Entity";
+			}
+			Name = String.Join ("", new string[]{id,Finder.GlobalCount.ToString ()});
 			getGraphics ();
 			scale = MainGraphic.scale;
 			SetAttributes ();
@@ -145,6 +168,9 @@ namespace Cosmos
 			isInitiated = true;
 			QueForUpdate ();
 			linkedEntities = new List<Entity> ();
+			stockpile = new Stockpile (this);
+			selectedLine = new VectorLine ("Selected_" + name, new Vector3[36], null, 3.0f);
+			selectedLine.color = Color.green;
 			return this;
 		}
 		public virtual void getGraphics ()
@@ -183,7 +209,9 @@ namespace Cosmos
 			foreach (Entity link in linkedEntities) {
 				link.MoveTo (iposition, skipTick, skipDraw);
 			}
-
+			if (isSelected) {
+				drawSelectedLine ();
+			}
 			if (!skipTick) {
 				QueForTick ();
 			} 
@@ -203,6 +231,9 @@ namespace Cosmos
 			}
 			if (meshDisplay != null) {
 				meshDisplay.setVisibility (visible);
+			}
+			if (!isVisible) {
+				isSelected = false;
 			}
 		}
 		public virtual void Destroy ()
@@ -231,6 +262,10 @@ namespace Cosmos
 			system.RemoveEntity (this);
 			newSystem.AddEntity (this);
 			system = newSystem;
+		}
+		public virtual bool InRect (Rect rect)
+		{
+			return MathI.RectIntersect (rect, bounds);
 		}
 		public virtual void Print ()
 		{

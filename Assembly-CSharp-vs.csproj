@@ -82,9 +82,6 @@
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Anatomy.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Limb.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Ship\ActorShip.cs" />
-     <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Prop.cs" />
-     <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Resources\Food\ResourceFood.cs" />
-     <Compile Include="Assets\Resources\Scripts\Entity\Things\Prop\Resources\PropResource.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Thing.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Utility Classes\Drop.cs" />
      <Compile Include="Assets\Resources\Scripts\Game.cs" />
@@ -100,6 +97,7 @@
      <Compile Include="Assets\Resources\Scripts\Managers\InputManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\MeshManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\PhysicsManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\Managers\ResourceManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TextureManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TickManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\Coord.cs" />
@@ -109,6 +107,8 @@
      <Compile Include="Assets\Resources\Scripts\Math\Measurement\UnitConversions.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\MinMax.cs" />
      <Compile Include="Assets\Resources\Scripts\Physics\PhysicsObject.cs" />
+     <Compile Include="Assets\Resources\Scripts\Resources\Resource.cs" />
+     <Compile Include="Assets\Resources\Scripts\Resources\Stockpile.cs" />
      <Compile Include="Assets\Resources\Scripts\Root.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Parser.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />
@@ -125,6 +125,9 @@
  </Reference>
  <Reference Include="UnityEngine.Analytics">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ </Reference>
+ <Reference Include="Vectrosity">
+ <HintPath>D:/Git/Game Dev/Cosmos4X/Assets/Plugins/Vectrosity.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>D:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

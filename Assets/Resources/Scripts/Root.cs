@@ -10,6 +10,7 @@ namespace Cosmos
 		{			
 			Application.targetFrameRate = 60;
 			GameManager.NewGame (0, new Vector3 (1, 0, 1));
+
 		}
 
 		void Update ()

@@ -7,6 +7,10 @@ namespace Cosmos
 {
 	public class ActorShip : Actor
 	{
+		public override Entity Init (string defID)
+		{
+			return base.Init (defID);
+		}
 		public override void AddBrain ()
 		{
 			brain = new BrainHuman ();

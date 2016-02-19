@@ -64,7 +64,7 @@ namespace Cosmos
 		//Planet
 		public static Dictionary<PlanetClass,MinMax> planetMass;
 		public static Dictionary<PlanetClass,MinMax>  planetDiameter;
-
+		//
 
 		public static void Init ()
 		{
@@ -80,9 +80,10 @@ namespace Cosmos
 		private static void GenOrbitMinMax ()
 		{
 			orbitApoapsis = new Dictionary<CelestialBodyType, MinMax> ();
-			orbitApoapsis.Add (CelestialBodyType.Star, new MinMax (20f, 10000f));
-			orbitApoapsis.Add (CelestialBodyType.Planet, new MinMax (0.1f, 30f));
-			orbitApoapsis.Add (CelestialBodyType.Moon, new MinMax (0.001f, 0.1f));
+			orbitApoapsis.Add (CelestialBodyType.Star, new MinMax (10000f, 50000f));
+			orbitApoapsis.Add (CelestialBodyType.Planet, new MinMax (20f, 10000f));
+			orbitApoapsis.Add (CelestialBodyType.Moon, new MinMax (0.1f, 30f));
+			orbitApoapsis.Add (CelestialBodyType.Asteroid, new MinMax (0.001f, 0.1f));
 		}
 		private static void GenStarMinMax ()
 		{

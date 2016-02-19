@@ -135,9 +135,9 @@ namespace Cosmos
 		}
 		public void UpdatePosition ()
 		{
-			//if (gameObject.transform.position != Pos) {
-			gameObject.transform.position = MathI.RotateVector (entity.Position, entity.Position + entity.rotationPoint, entity.rotation);
-			//}
+			if (entity != null) {
+				gameObject.transform.position = MathI.RotateVector (entity.Position, entity.Position + entity.rotationPoint, entity.rotation);
+			}
 		}
 		public void Rotate ()
 		{

@@ -57,11 +57,13 @@ namespace Cosmos
 		{
 			foreach (int i in TickerList.Keys) {
 				if (MathI.isAMultiple (curTick, i)) {
-					if (TickerList.ContainsKey (i)) {
-						List<Tickable> currentList = TickerList [i];
-						if (currentList.Count > 0) {
-							foreach (Tickable tickable in currentList) {
-								tickQue.Add (tickable);
+					List<Tickable> currentList = TickerList [i];
+					if (currentList.Count > 0) {
+						foreach (Tickable tickable in currentList) {
+							tickQue.Add (tickable);
+							if (tickable.Interval != i) {
+								RemoveTicker (tickable);
+								AddTicker (tickable);
 							}
 						}
 					}
@@ -140,8 +142,10 @@ namespace Cosmos
 		{
 			if (isPaused) {
 				isPaused = false;
+				GameManager.curGameState = GameManager.GameState.GamePaused;
 			} else {
 				isPaused = true;
+				GameManager.curGameState = GameManager.GameState.GameRunning;
 			}
 		}
 

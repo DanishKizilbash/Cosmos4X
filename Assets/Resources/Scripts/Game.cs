@@ -12,7 +12,6 @@ namespace Cosmos
 		public List<PlanetarySystem> planetarySystems;
 		public int currentSystemID;		
 		public  PlanetarySystem currentSystem;
-		public List<ActorShip> ships;
 		private int dir = 1;
 		private List<int> zoomLevels;
 		public float currentZoomScale = 1;
@@ -42,7 +41,8 @@ namespace Cosmos
 		public void Start ()
 		{
 			EntityManager.AddPlanetarySystem (5);
-			ships = EntityManager.AddShip (1);	
+			EntityManager.AddShip (1);	
+			planetarySystems [0].SetVisiblity (true);
 		}
 
 		public void Update ()
@@ -54,15 +54,24 @@ namespace Cosmos
 					dir = 1;
 				}
 			}
-			foreach (ActorShip ship in ships) {
-				if (dir == 1) {
-					ship.physicsObject.ApplyThrust (new Vector3 (0.01f, 0.0f, 0), new Vector3 (-0.5f, 0.5f, 0));
-				} else {
-					ship.physicsObject.ApplyThrust (new Vector3 (-0.01f, 0.0f, 0), new Vector3 (0.5f, 0.5f, 0));
+			foreach (object obj in Finder.ActorDatabase.GetAll()) {
+
+				try {
+
+					ActorShip ship = (ActorShip)obj;
+					if (dir == 1) {
+						ship.physicsObject.ApplyThrust (new Vector3 (0.01f, 0.0f, 0), new Vector3 (-0.5f, 0.5f, 0));
+					} else {
+						ship.physicsObject.ApplyThrust (new Vector3 (-0.01f, 0.0f, 0), new Vector3 (0.5f, 0.5f, 0));
 					
+					}
+					ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.05f, 0), new Vector3 (0.5f, -0.5f, 0));
+					ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.05f, 0), new Vector3 (-0.5f, -0.5f, 0));
+				} catch (UnityException e) {
+
 				}
-				ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.05f, 0), new Vector3 (0.5f, -0.5f, 0));
-				ship.physicsObject.ApplyThrust (new Vector3 (0.0f, 0.05f, 0), new Vector3 (-0.5f, -0.5f, 0));
+				Actor actor = (Actor)obj;
+
 
 			}
 		}
@@ -78,6 +87,10 @@ namespace Cosmos
 			zoomLevels.Add (5000);
 			zoomLevels.Add (7500);
 			zoomLevels.Add (10000);
+			zoomLevels.Add (15000);
+			zoomLevels.Add (20000);
+			zoomLevels.Add (30000);
+			zoomLevels.Add (50000);
 		}
 		private void GetCurrentZoomScale ()
 		{
@@ -91,10 +104,10 @@ namespace Cosmos
 			if (id > planetarySystems.Count - 1) {
 				id = planetarySystems.Count - 1;
 			}
-			currentSystem.SetEntityVisiblity (false);
+			currentSystem.SetVisiblity (false);
 			currentSystem = planetarySystems [id];
 			currentSystemID = id;
-			currentSystem.SetEntityVisiblity (true);
+			currentSystem.SetVisiblity (true);
 		}
 	}
 }

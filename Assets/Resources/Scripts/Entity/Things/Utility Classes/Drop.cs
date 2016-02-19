@@ -19,7 +19,7 @@ namespace Cosmos
 			return  "ID: " + id + " , Type: " + type + " , Qty: " + qty;
 		}
 		public void CreateNew (Thing parent)
-		{
+		{/*
 			Type myType = Type.GetType ("Eniso." + type);
 			if (myType != null) {
 				Thing newDrop = (Thing)Activator.CreateInstance (myType);
@@ -27,7 +27,7 @@ namespace Cosmos
 					newDrop.Init ("Thing_Prop_" + id);
 					newDrop.Position = parent.Position;
 					try {
-						((PropResource)newDrop).AddToStack (qty);
+						((Resource)newDrop).Add (qty);
 					} catch (InvalidCastException) { 
 					}
 				} else {
@@ -36,6 +36,7 @@ namespace Cosmos
 			} else {
 				Debug.Log ("Type value is null for drop of id " + id + " could not create");
 			}
+			*/
 		}
 	}
 }

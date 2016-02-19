@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Vectrosity;
 
 namespace Cosmos
 {
@@ -18,18 +19,33 @@ namespace Cosmos
 		public float OrbitalSpeed;
 		public float Apoapsis;
 		public Vector3 Barycenter;
-		public OrbitEntity Parent;
+		//
+		private OrbitEntity parent;
+		public OrbitEntity Parent {
+			get {
+				return parent;
+			}
+			set {
+				if (value != parent) {
+					CalculateOrbitProperties ();
+					parent = value;
+				}
+			}
+		}
 		//
 		public float CurAngle;
-
+		//
 		public Vector3 currentPosition {
 			get {
 				return getCurrentPosition ();
 			}
 		}
-		public OrbitEntity (CelestialBody body, float mass, float diameter, OrbitEntity parent, Vector3 barycenter)
+		//
+		private VectorLine debugLine;
+		//
+		public OrbitEntity (CelestialBody body, float mass, float diameter, OrbitEntity iparent, Vector3 barycenter)
 		{
-			Parent = parent;
+			parent = iparent;
 			Init (body, mass, diameter, Barycenter);
 		}
 		public OrbitEntity (CelestialBody body, float mass, float diameter, Vector3 barycenter)
@@ -43,7 +59,8 @@ namespace Cosmos
 			EquatorialDiameter = diameter;
 			Barycenter = barycenter;
 			CalculateBaseProperties ();
-			CalculateOrbitProperties ();
+			CalculateOrbitProperties ();		
+			debugLine = new VectorLine ("Debug_Orbit_" + Body.Name, new Vector3[90], null, 1.0f);
 		}
 		private void CalculateBaseProperties ()
 		{
@@ -55,7 +72,8 @@ namespace Cosmos
 			if (Parent == null) {
 				Apoapsis = 0;
 			} else {
-				Apoapsis = GalaxyManager.orbitApoapsis [Parent.Body.type].Rand ();
+				Apoapsis = GalaxyManager.orbitApoapsis [Body.type].Rand () + EquatorialDiameter * 2 + parent.EquatorialDiameter * 2;
+				Barycenter = Parent.Barycenter;
 			}
 			CurAngle = Random.Range (0, 360);
 		
@@ -64,6 +82,14 @@ namespace Cosmos
 		{
 			return MathI.RotateVector (Barycenter + new Vector3 (0, Apoapsis, 0), Barycenter, CurAngle);
 		}
+		public void ShowOrbit (bool visible=true)
+		{	
+			debugLine.active = visible;
+			if (visible) {
+				debugLine.MakeCircle (Parent.Body.Center, Vector3.forward, Vector3.Magnitude (Parent.Body.Center - Body.Center));
+				debugLine.Draw3DAuto ();
+			}
+		}
 		public void Print ()
 		{
 			Debug.Log ("Mass:" + Mass);
@@ -71,6 +97,12 @@ namespace Cosmos
 			Debug.Log ("Volume:" + Volume);
 			Debug.Log ("Density:" + Density);
 			Debug.Log ("Apoapsis:" + Apoapsis);
+		}
+		public void Destroy ()
+		{
+			VectorLine.Destroy (ref debugLine);
+			Body = null;
+			parent = null;
 		}
 	}
 }

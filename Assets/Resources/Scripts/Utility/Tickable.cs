@@ -4,9 +4,13 @@ namespace Cosmos
 {
 	public abstract class Tickable
 	{
-		public int Interval = 60;
+		public int Interval = 1;
 		public bool TickRequired;
 		public bool AddedToTickManager = false;
+		public Tickable ()
+		{
+			TickManager.AddTicker (this);
+		}
 		public abstract void Tick ();
 	}
 }

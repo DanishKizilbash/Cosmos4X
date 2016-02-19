@@ -62,7 +62,7 @@ namespace Cosmos
 				//Debug.Log ("Cannot convert to Entity");
 			}
 			try {
-				ResourceDatabase.Remove ((PropResource)obj);
+				ResourceDatabase.Remove ((Resource)obj);
 			} catch (InvalidCastException) { 
 				//Debug.Log ("Cannot convert to Resource");
 			}
@@ -310,20 +310,20 @@ namespace Cosmos
 
 		public class ResourcesDatabase:Database
 		{
-			public List<PropResource> GetAllWithFunction (string function)
+			public List<Resource> GetAllWithFunction (string function)
 			{
 				if (function == null) {
 					return null;
 				}
-				List<PropResource> value = null;
+				List<Resource> value = null;
 				List<object> allResources = new List<object> ();
 				allResources.AddRange (dictionary.Values);
 				List<object> targetResources = allResources.FindAll (
 					delegate(object iResource) {
-					return ((PropResource)iResource).function == function;
+					return ((Resource)iResource).function == function;
 				});
-				value = targetResources.ConvertAll ((new Converter<object,PropResource> (delegate(object input) {
-					return (PropResource)input;
+				value = targetResources.ConvertAll ((new Converter<object,Resource> (delegate(object input) {
+					return (Resource)input;
 				})));
 				return value;
 			}

@@ -34,6 +34,8 @@ namespace Cosmos
 			TickManager.Init ();
 			//Initiate User Control
 			InputManager.Init ();
+			//Prepare Resources
+			ResourceManager.Init ();
 			//Create Galaxy
 			GalaxyManager.Init ();
 			currentGame = new Game ();
@@ -61,11 +63,9 @@ namespace Cosmos
 		public static void LateUpdate ()
 		{
 			if (curGameState == GameState.GameRunning) {	
-
 				Finder.Update ();
-				DrawManager.Draw ();
-
 			}
+			DrawManager.Draw ();
 			//Profiler.ExposeStrings ();
 
 		}

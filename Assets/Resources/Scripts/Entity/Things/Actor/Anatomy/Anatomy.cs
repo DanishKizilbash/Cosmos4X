@@ -128,9 +128,9 @@ namespace Cosmos
 			Limbs.TryGetValue (limb, out value);
 			return value;
 		}
-		public bool ConsumeFood (ResourceFood food, int qty = 1)
+		/*public bool ConsumeFood (ResourceFood food, int qty = 1)
 		{
-			int qtyConsumed = food.Consume (qty);
+			int qtyConsumed = food.Remove (qty);
 			Hunger += food.hunger * qtyConsumed;
 			Thirst += food.thirst * qtyConsumed;
 			if (Thirst > MaxThirst) {
@@ -142,7 +142,7 @@ namespace Cosmos
 			}
 
 			return false;
-		}
+		}*/
 		public void Damage (float damage, string limb="")
 		{
 			if (limb != "") {

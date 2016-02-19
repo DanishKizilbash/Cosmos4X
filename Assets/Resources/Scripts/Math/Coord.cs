@@ -23,8 +23,8 @@ namespace Cosmos
 		}
 		public Vector3 vector {
 			get {
-				float x = pos.x + UnitConversion.Distance.LightYear.Value (sector.x, UnitConversion.Distance.LightDay);
-				float y = pos.y + UnitConversion.Distance.LightYear.Value (sector.y, UnitConversion.Distance.LightDay);
+				float x = pos.x + UnitConversion.Distance.LightYear.Value (sector.x, UnitConversion.Distance.Mm);
+				float y = pos.y + UnitConversion.Distance.LightYear.Value (sector.y, UnitConversion.Distance.Mm);
 				return new Vector3 (x, y, 0);
 			}
 		}

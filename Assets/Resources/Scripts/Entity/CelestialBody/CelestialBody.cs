@@ -8,14 +8,25 @@ namespace Cosmos
 	public abstract class CelestialBody:Entity
 	{
 		public CelestialBodyType type;
-		public CelestialBody parent;
+		public CelestialBody parent {
+			get {
+				if (orbit == null || orbit.Parent == null) {
+					return null;
+				}
+				return orbit.Parent.Body;
+			}
+			set {
+				if (orbit != null) {
+					orbit.Parent = value.orbit;
+				}
+			}
+		}
 		public OrbitEntity orbit;
 		public Coord coord {
 			get {
 				return system.coord;
 			}
 		}
-		//
 		public float temperature;
 		public virtual Entity Init (string defID, CelestialBodyType Type, float Mass, float Diameter, PlanetarySystem System, CelestialBody parent=null)
 		{
@@ -28,6 +39,8 @@ namespace Cosmos
 			}
 			Entity entity = base.Init (defID);
 			ChangeSystem (System);
+			ResourceManager.RandomizeStockpile (this);
+
 			return entity;
 		}
 		public override void Print ()
@@ -40,14 +53,6 @@ namespace Cosmos
 		{
 			return "CelestialBody_Star_M_Default";
 		}
-		public override Vector3 Position {
-			get {
-				return Center;
-			}
-			set {
-				MoveTo (value);
-			}
-		}
 		public void Move ()
 		{
 			Vector3 offset = Vector3.zero;
@@ -56,6 +61,23 @@ namespace Cosmos
 			}
 			this.MoveTo (offset + orbit.currentPosition);
 		}
-
+		public override bool InRect (Rect rect)
+		{
+			float rad = scale.x > scale.y ? scale.x / 2 : scale.y / 2;
+			return MathI.CircleRectIntersect (rad, Center, rect);
+		}
+		public override void OnSelected (bool selected)
+		{
+			base.OnSelected (selected);
+			if (selected) {
+				stockpile.Print ();
+			}
+		}
+		public override void Destroy ()
+		{
+			orbit.Destroy ();
+			system.RemoveEntity (this);
+			base.Destroy ();
+		}
 	}
 }
