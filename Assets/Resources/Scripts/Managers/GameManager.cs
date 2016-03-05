@@ -38,6 +38,7 @@ namespace Cosmos
 			ResourceManager.Init ();
 			//Create Galaxy
 			GalaxyManager.Init ();
+			UIManager.Init ();
 			currentGame = new Game ();
 			currentGame.Start ();
 			curGameState = GameState.GameRunning;
@@ -66,6 +67,7 @@ namespace Cosmos
 				Finder.Update ();
 			}
 			DrawManager.Draw ();
+			UIManager.Update ();
 			//Profiler.ExposeStrings ();
 
 		}

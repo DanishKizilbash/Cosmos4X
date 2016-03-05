@@ -12,10 +12,13 @@ namespace Cosmos
 		//Camera
 		public static GameObject MainCamera;
 		public static Vector2 CameraPos = new Vector2 (0, 0);
+		public static float CameraOrthoSize;
 		public static Vector2 TargetCameraPos = new Vector2 (0, 0);
 		public static float TargetSize = 1f;
-		public static float CameraEase = 0.1f;
+		public static float CameraEase = 0.2f;
 		public static Vector2 DisplaySize;
+		//
+		public static bool ZoomToMouse = true;
 
 		public static void Init (GameObject parent = null)
 		{
@@ -50,7 +53,7 @@ namespace Cosmos
 				break;
 			}*/
 				
-
+			//Finder.SelectedEntities[0]
 
 
 			MeshManager.ApplyMeshUpdates ();
@@ -60,19 +63,31 @@ namespace Cosmos
 		#region Camera
 		private static void UpdateCameraPos ()
 		{
-			CameraPos += (TargetCameraPos - CameraPos) * CameraEase;
-			//Debug.Log (CameraPos);
-			Camera.main.transform.position = new Vector3 (CameraPos.x, CameraPos.y, -1);
 			TargetSize = GameManager.currentGame.currentZoomScale;
-			Camera.main.orthographicSize = Mathf.SmoothStep (Camera.main.orthographicSize, TargetSize, 0.25f);
+			CameraOrthoSize = Mathf.SmoothStep (Camera.main.orthographicSize, TargetSize, 0.25f);
+			if (ZoomToMouse && CameraOrthoSize - TargetSize > 0.01f) {
+				Vector3 MousePos3 = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				Vector2 MousePos = new Vector2 (MousePos3.x, MousePos3.y);
+				float OrthoMultiplier = (2f / Camera.main.orthographicSize * (Camera.main.orthographicSize - CameraOrthoSize));	
+				Vector2 MouseOffset = (MousePos - TargetCameraPos) * OrthoMultiplier;
+				TargetCameraPos += MouseOffset;
+			} 
+			CameraPos += (TargetCameraPos - CameraPos) * CameraEase;
+			//
+			Camera.main.transform.position = new Vector3 (CameraPos.x, CameraPos.y, -1);
+			Camera.main.orthographicSize = CameraOrthoSize;
+
 		}
 		public static void MoveCameraBy (Vector2 amount)
 		{
 			TargetCameraPos = TargetCameraPos + amount;
 		}
-		public static void MoveCameraTo (Vector2 pos)
+		public static void MoveCameraTo (Vector2 pos, float zoom = 0)
 		{
 			TargetCameraPos = pos;
+			if (zoom != 0) {
+				GameManager.currentGame.currentZoomScale = zoom;
+			}
 		}
 		#endregion
 

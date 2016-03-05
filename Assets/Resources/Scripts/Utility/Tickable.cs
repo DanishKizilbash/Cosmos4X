@@ -2,7 +2,7 @@
 using System.Collections;
 namespace Cosmos
 {
-	public abstract class Tickable
+	public abstract class Tickable:Exposable
 	{
 		public int Interval = 1;
 		public bool TickRequired;

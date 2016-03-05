@@ -108,6 +108,9 @@ namespace Cosmos
 			if (IsKeyDown ("D")) {
 				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
 			}
+			if (IsKeyDown ("V")) {
+				DrawManager.MoveCameraTo (Finder.SelectedEntities [0].Center);
+			}
 			if (IsKeyDown ("SPACE")) {
 				TickManager.SwitchPauseState ();
 				RemoveKey ("SPACE");
@@ -177,6 +180,9 @@ namespace Cosmos
 			if (Input.GetKeyDown (KeyCode.E)) {
 				AddKey ("E");
 			}
+			if (Input.GetKeyDown (KeyCode.V)) {
+				AddKey ("V");
+			}
 			if (Input.GetKeyDown (KeyCode.PageUp)) {
 				AddKey ("PAGEUP");
 			}
@@ -209,6 +215,9 @@ namespace Cosmos
 			}	
 			if (Input.GetKeyUp (KeyCode.E)) {
 				RemoveKey ("E");
+			}
+			if (Input.GetKeyUp (KeyCode.V)) {
+				RemoveKey ("V");
 			}
 			if (Input.GetKeyUp (KeyCode.PageUp)) {
 				RemoveKey ("PAGEUP");

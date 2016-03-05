@@ -131,6 +131,7 @@ namespace Cosmos
 					selectedLine.active = true;
 					drawSelectedLine ();
 				}
+				Expose ();
 			} else {
 				Finder.SelectedEntities.Remove (this);
 				selectedLine.active = false;
@@ -273,7 +274,14 @@ namespace Cosmos
 		}
 		public abstract string DefaultID ();
 		//
+		public override void Expose ()
+		{
+			string s = this.GetType ().BaseType.ToString ();
+			string[] ss = s.Split (new string[1]{"."}, StringSplitOptions.None);
+			Debug.Log (ss [1]);
+			base.Expose ();
 
+		}
 		public override string ToString ()
 		{
 			return Name;

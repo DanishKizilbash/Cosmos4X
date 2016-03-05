@@ -100,6 +100,7 @@
      <Compile Include="Assets\Resources\Scripts\Managers\ResourceManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TextureManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Managers\TickManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\Managers\UIManager.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\Coord.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\LoadedDie.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\MathI.cs" />
@@ -110,6 +111,8 @@
      <Compile Include="Assets\Resources\Scripts\Resources\Resource.cs" />
      <Compile Include="Assets\Resources\Scripts\Resources\Stockpile.cs" />
      <Compile Include="Assets\Resources\Scripts\Root.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\Panels\Panel.cs" />
+     <Compile Include="Assets\Resources\Scripts\Utility\Exposable.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Parser.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Tickable.cs" />
