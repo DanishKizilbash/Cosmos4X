@@ -7,6 +7,7 @@ namespace Cosmos
 {
 	public abstract class Entity:Tickable
 	{
+		public Exposable exposer;
 		public string cachedDefID = "";
 		private Vector3 position = Vector3.zero;
 		private Graphic graphic;	
@@ -122,6 +123,9 @@ namespace Cosmos
 		}
 		public override void Tick ()
 		{
+			if (isSelected) {
+				Expose ();
+			}
 		}
 		public virtual void OnSelected (bool selected)
 		{
@@ -136,6 +140,7 @@ namespace Cosmos
 				Finder.SelectedEntities.Remove (this);
 				selectedLine.active = false;
 				selectedLine.StopDrawing3DAuto ();
+				Expose (false);
 			}
 		}
 		private void drawSelectedLine ()
@@ -146,7 +151,7 @@ namespace Cosmos
 		}
 		public virtual Entity Init (string defID)
 		{
-			//Exposer = new Exposable (this);
+			exposer = new Exposable (this);
 			system = GameManager.currentGame.currentSystem;
 			system.AddEntity (this);
 			getDef (defID);
@@ -274,13 +279,18 @@ namespace Cosmos
 		}
 		public abstract string DefaultID ();
 		//
-		public override void Expose ()
+		public virtual void Expose (bool visible=true)
 		{
-			string s = this.GetType ().BaseType.ToString ();
-			string[] ss = s.Split (new string[1]{"."}, StringSplitOptions.None);
-			Debug.Log (ss [1]);
-			base.Expose ();
-
+			//exposer.Expose ();
+			string type = this.GetType ().Name.ToString ();
+			if (!UIManager.SetPanelEntity (type, this, visible)) {
+				string basetype = this.GetType ().BaseType.ToString ();
+				string[] basetypeString = basetype.Split (new string[1]{"."}, StringSplitOptions.None);
+				if (!UIManager.SetPanelEntity (basetypeString [1], this, visible)) {
+					UIManager.SetPanelEntity ("Entity", this, visible);
+				}
+			}
+			
 		}
 		public override string ToString ()
 		{

@@ -8,6 +8,7 @@ namespace Cosmos
 	public class PlanetarySystem:Tickable
 	{
 		public string name;
+		public int ID;
 		public List<Entity> entities;
 		public List<CelestialBody> celestialBodies;
 		public List<StarBody> stars;

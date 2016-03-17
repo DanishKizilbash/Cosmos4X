@@ -7,6 +7,7 @@ namespace Cosmos
 {
 	public class ActorShip : Actor
 	{
+		public Colony homeColony;
 		public override Entity Init (string defID)
 		{
 			return base.Init (defID);

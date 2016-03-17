@@ -66,9 +66,10 @@ namespace Cosmos
 		}
 		public static void selectInRect (Rect rect)
 		{
-
 			foreach (Entity entity in GameManager.currentGame.currentSystem.entities) {
-				entity.isSelected = entity.InRect (rect);			
+
+				entity.isSelected = entity.InRect (rect);
+							
 			}
 		}
 		private static void drawSelectRect (bool visible=true)
@@ -116,30 +117,62 @@ namespace Cosmos
 				RemoveKey ("SPACE");
 			}
 			if (IsKeyDown ("E")) {
+				Debug.Log ("E");
 				if (IsKeyDown ("LCONTROL")) {
+					Debug.Log ("lctrl");
 					foreach (Entity entity in Finder.SelectedEntities) {
 						entity.Destroy ();
 					}
-				}
-				foreach (Entity entity in Finder.SelectedEntities) {
-					if (entity != null && !entity.isDestroyed) {
-						Thing thing;
-						try {
-							thing = (Thing)entity;
-						} catch (InvalidCastException) {
-							thing = null;
-						}
-						if (thing != null) {
-							JobManager.AddJob (thing, "Work");
+				} else {
+					foreach (Entity entity in Finder.SelectedEntities) {
+						if (entity != null && !entity.isDestroyed) {
+							Thing thing;
+							try {
+								thing = (Thing)entity;
+							} catch (InvalidCastException) {
+								thing = null;
+							}
+							if (thing != null) {
+								JobManager.AddJob (thing, "Work");
+							}
 						}
 					}
 				}
 			}
-			if (IsKeyDown ("F")) {
+
+			if (IsKeyDown ("C")) {
 				foreach (Entity entity in Finder.SelectedEntities) {
-					EntityManager.AddShip (1, entity.Position);
+					CelestialBody cb;
+					try {
+						cb = (CelestialBody)entity;
+					} catch (InvalidCastException) {
+						cb = null;
+					}
+					if (cb != null) {
+						if (cb.colony == null) {
+							cb.colony = new Colony (cb);
+						}
+					}
 				}
 			}
+
+			if (IsKeyDown ("F")) {
+				foreach (Entity entity in Finder.SelectedEntities) {
+					CelestialBody cb;
+					try {
+						cb = (CelestialBody)entity;
+					} catch (InvalidCastException) {
+						cb = null;
+					}
+					if (cb != null) {
+						if (cb.colony != null) {
+							cb.colony.BuildShip ();
+						}
+					}
+
+				}
+			}
+
 			if (IsKeyDown ("PAGEUP")) {
 				GameManager.currentGame.ChangeSystem (GameManager.currentGame.currentSystemID + 1);
 				Debug.Log (GameManager.currentGame.currentSystemID);
@@ -156,6 +189,9 @@ namespace Cosmos
 		}
 		public  static void CheckKeyDown ()
 		{
+			if (Input.GetKeyDown (KeyCode.LeftControl)) {
+				AddKey ("LCONTROL");
+			}	
 			if (Input.GetKeyDown (KeyCode.W)) {
 				AddKey ("W");
 			}
@@ -171,12 +207,12 @@ namespace Cosmos
 			if (Input.GetKeyDown (KeyCode.F)) {
 				AddKey ("F");
 			}
+			if (Input.GetKeyDown (KeyCode.C)) {
+				AddKey ("C");
+			}
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				AddKey ("SPACE");
-			}
-			if (Input.GetKeyDown (KeyCode.LeftControl)) {
-				AddKey ("LCONTROL");
-			}			
+			}					
 			if (Input.GetKeyDown (KeyCode.E)) {
 				AddKey ("E");
 			}
@@ -192,6 +228,10 @@ namespace Cosmos
 		}
 		public static void CheckKeyUp ()
 		{
+			
+			if (Input.GetKeyUp (KeyCode.LeftControl)) {
+				RemoveKey ("LCONTROL");
+			}
 			if (Input.GetKeyUp (KeyCode.W)) {
 				RemoveKey ("W");
 			}
@@ -207,11 +247,11 @@ namespace Cosmos
 			if (Input.GetKeyUp (KeyCode.F)) {
 				RemoveKey ("F");
 			}
+			if (Input.GetKeyUp (KeyCode.C)) {
+				RemoveKey ("C");
+			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
 				RemoveKey ("SPACE");
-			}
-			if (Input.GetKeyUp (KeyCode.LeftControl)) {
-				RemoveKey ("LCONTROL");
 			}	
 			if (Input.GetKeyUp (KeyCode.E)) {
 				RemoveKey ("E");

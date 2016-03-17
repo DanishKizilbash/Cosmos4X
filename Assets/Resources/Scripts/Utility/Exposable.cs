@@ -12,15 +12,16 @@ namespace Cosmos
 		private string noteMessage = "";
 		private string persistentMessage = "";
 		public string cachedMessage = "";
+		public Entity entity;
 		public string Message {
 			get {
 				cachedMessage = persistentMessage + noteMessage;
 				return cachedMessage;
 			}
 		} 
-		public Exposable ()
+		public Exposable (Entity TargetEntity)
 		{
-
+			entity = TargetEntity;
 		}
 
 		public string ExposePersistents ()
@@ -82,8 +83,7 @@ namespace Cosmos
 			if (cachedNotes != "") {
 				noteMessage = cachedNotes;
 			}
-			Text txt = GameObject.Find ("txtName").GetComponent<Text> ();
-			txt.text = "ayylmao";
+			//UIManager
 			Clear ();
 		}
 	}

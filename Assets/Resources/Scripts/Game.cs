@@ -46,7 +46,7 @@ namespace Cosmos
 		}
 
 		public void Update ()
-		{
+		{/*
 			if (Random.Range (0, 100) > 98) {
 				if (dir == 1) {
 					dir = 2;
@@ -74,6 +74,7 @@ namespace Cosmos
 
 
 			}
+			*/
 		}
 		private void SetUpZoomLevels ()
 		{

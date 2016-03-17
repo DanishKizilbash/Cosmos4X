@@ -7,6 +7,7 @@ namespace Cosmos
 
 	public abstract class CelestialBody:Entity
 	{
+		public Colony colony;
 		public CelestialBodyType type;
 		public CelestialBody parent {
 			get {
@@ -40,6 +41,8 @@ namespace Cosmos
 			Entity entity = base.Init (defID);
 			ChangeSystem (System);
 			ResourceManager.RandomizeStockpile (this);
+			Name = system.name + " " + type.ToString () + " " + UnityEngine.Random.Range (0, 999);
+			//colony = new Colony (this);
 
 			return entity;
 		}

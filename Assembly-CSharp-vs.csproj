@@ -65,6 +65,7 @@
      <Compile Include="Assets\Resources\Scripts\AI\Jobs\SkillsTemplate.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Jobs\Worker.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Pathfinding\PathFinder.cs" />
+     <Compile Include="Assets\Resources\Scripts\Colony\Colony.cs" />
      <Compile Include="Assets\Resources\Scripts\Databases\Database.cs" />
      <Compile Include="Assets\Resources\Scripts\Databases\Finder.cs" />
      <Compile Include="Assets\Resources\Scripts\Defs\Def.cs" />
@@ -112,6 +113,12 @@
      <Compile Include="Assets\Resources\Scripts\Resources\Stockpile.cs" />
      <Compile Include="Assets\Resources\Scripts\Root.cs" />
      <Compile Include="Assets\Resources\Scripts\UI\Panels\Panel.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\Panels\Panels\ActorShipPanel.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\Panels\Panels\CelestialBodyPanel.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\Panels\Panels\EntityPanel.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\UIElement\UIElement.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\UIElement\UIElements\PanelElement.cs" />
+     <Compile Include="Assets\Resources\Scripts\UI\UIElement\UIElements\TextBoxElement.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Exposable.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Parser.cs" />
      <Compile Include="Assets\Resources\Scripts\Utility\Profiler.cs" />

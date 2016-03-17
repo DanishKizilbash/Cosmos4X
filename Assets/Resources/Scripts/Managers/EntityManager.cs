@@ -9,11 +9,11 @@ namespace Cosmos
 		{
 			return AddShip (qty, 0, 0, 0);
 		}
-		public static List<ActorShip> AddShip (int qty, Vector3 position, int systemID=-1)
+		public static List<ActorShip> AddShip (int qty, Vector3 position, int systemID=-1, Colony homeColony = null)
 		{
-			return AddShip (qty, position.x, position.y, position.z, systemID);
+			return AddShip (qty, position.x, position.y, position.z, systemID, homeColony);
 		}
-		public static List<ActorShip> AddShip (int qty, float x, float z, float y, int systemID=-1)
+		public static List<ActorShip> AddShip (int qty, float x, float z, float y, int systemID=-1, Colony homeColony = null)
 		{
 			if (systemID == -1) {
 				systemID = GameManager.currentGame.currentSystemID;
@@ -25,6 +25,7 @@ namespace Cosmos
 				act.Init ("");
 				act.MoveTo (new Vector3 (x, y, z));
 				act.system = GameManager.currentGame.planetarySystems [systemID];
+				act.homeColony = homeColony;
 				ships.Add (act);
 			}
 			return ships;
@@ -35,6 +36,7 @@ namespace Cosmos
 			for (int i =0; i<qty; i++) {
 				PlanetarySystem sys;
 				sys = new PlanetarySystem (coord);
+				sys.ID = i;
 				systems.Add (sys);
 			}
 			return systems;
