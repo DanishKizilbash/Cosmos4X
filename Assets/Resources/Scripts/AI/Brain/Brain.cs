@@ -115,10 +115,12 @@ namespace Cosmos.AI
 
 		private object ParseStringToObject (string str)
 		{
+			//Vector
 			Vector3 vector = Parser.StringToVector3 (str);
 			if (vector != new Vector3 (float.MaxValue, float.MaxValue, float.MaxValue)) {
 				return vector;
 			}
+			//
 			return null;
 		}
 

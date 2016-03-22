@@ -47,15 +47,19 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Brain.cs" />
-     <Compile Include="Assets\Resources\Scripts\AI\Brain\BrainHuman.cs" />
+     <Compile Include="Assets\Resources\Scripts\AI\Brain\BrainShip.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Intent\Intent.cs" />
+     <Compile Include="Assets\Resources\Scripts\AI\Brain\Intent\IntentIdle.cs" />
+     <Compile Include="Assets\Resources\Scripts\AI\Brain\Intent\IntentMoveTo.cs" />
+     <Compile Include="Assets\Resources\Scripts\AI\Brain\Intent\IntentWander.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Modifier\Modifier.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Modifier\ModifierGetNearest.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Modifier\ModifierGetRandom.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\State.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\Task.cs" />
-     <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\TaskFindPath.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\TaskGetCurrentJobPosition.cs" />
+     <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\TaskManueverToPosition.cs" />
+     <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\TaskSetTargetPosition.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\TaskWait.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Brain\Task\TaskWorkAtPosition.cs" />
      <Compile Include="Assets\Resources\Scripts\AI\Jobs\Job.cs" />
@@ -79,9 +83,9 @@
      <Compile Include="Assets\Resources\Scripts\Entity\CelestialBody\PlanetarySystem.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Entity.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Actor.cs" />
-     <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\ActorHuman.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Anatomy.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Limb.cs" />
+     <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\ThrusterLimb.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Actor\Ship\ActorShip.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Thing.cs" />
      <Compile Include="Assets\Resources\Scripts\Entity\Things\Utility Classes\Drop.cs" />
@@ -108,6 +112,7 @@
      <Compile Include="Assets\Resources\Scripts\Math\Measurement\Unit.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\Measurement\UnitConversions.cs" />
      <Compile Include="Assets\Resources\Scripts\Math\MinMax.cs" />
+     <Compile Include="Assets\Resources\Scripts\Physics\Force.cs" />
      <Compile Include="Assets\Resources\Scripts\Physics\PhysicsObject.cs" />
      <Compile Include="Assets\Resources\Scripts\Resources\Resource.cs" />
      <Compile Include="Assets\Resources\Scripts\Resources\Stockpile.cs" />

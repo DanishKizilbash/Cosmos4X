@@ -146,7 +146,7 @@ namespace Cosmos
 		private void drawSelectedLine ()
 		{
 			float rad = scale.x > scale.y ? scale.x / 2 : scale.y / 2;
-			selectedLine.MakeCircle (Center, rad);	
+			selectedLine.MakeCircle (Center, Vector3.forward, rad, 16);	
 			selectedLine.Draw3DAuto ();
 		}
 		public virtual Entity Init (string defID)
@@ -175,7 +175,7 @@ namespace Cosmos
 			QueForUpdate ();
 			linkedEntities = new List<Entity> ();
 			stockpile = new Stockpile (this);
-			selectedLine = new VectorLine ("Selected_" + name, new Vector3[36], null, 3.0f);
+			selectedLine = new VectorLine ("Selected_" + name, new Vector3[64], null, 3.0f);
 			selectedLine.color = Color.green;
 			return this;
 		}

@@ -4,13 +4,11 @@ using System.Collections.Generic;
 
 namespace Cosmos.AI
 {
-	public class BrainHuman : Brain
+	public class BrainShip : Brain
 	{
 		public override void InitiateLogic ()
 		{
-			/*
 			logic.Add ("UserMoveTo", (Intent)(new IntentMoveTo ().Initiate (this, this)));
-			*/
 			base.InitiateLogic ();
 		}
 		public override void ProcessStimulus ()

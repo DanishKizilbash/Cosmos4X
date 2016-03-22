@@ -80,9 +80,18 @@ namespace Cosmos
 		{
 			zoomLevels = new List<int> ();
 			zoomLevels.Add (1);
+			zoomLevels.Add (2);
+			zoomLevels.Add (4);
+			zoomLevels.Add (6);
+			zoomLevels.Add (8);
 			zoomLevels.Add (10);
+			zoomLevels.Add (25);
+			zoomLevels.Add (50);
+			zoomLevels.Add (75);
 			zoomLevels.Add (100);
+			zoomLevels.Add (250);
 			zoomLevels.Add (500);
+			zoomLevels.Add (750);
 			zoomLevels.Add (1000);
 			zoomLevels.Add (2500);
 			zoomLevels.Add (5000);

@@ -12,13 +12,12 @@ namespace Cosmos
 		public static float CameraEase = 0.1f;
 		public static Dictionary<string,bool> KeyIsDown = new Dictionary<string, bool> ();
 		private static Entity lastSelectedEntity;
-		private static int depthChangeDelay = 2;
-		private static int depthChangeTime = 0;
 		public static Camera mainCam;
 		public static bool selectMode = false;
 		private static Vector3 selectOrig;
 		private static Rect selectRect;
 		private static VectorLine selectLine;
+		public static bool camLockMode = false;
 		public static Vector3 worldMousePos {
 			get {
 				return mainCam.ScreenToWorldPoint (Input.mousePosition);
@@ -40,7 +39,16 @@ namespace Cosmos
 			//
 
 			if (Input.GetMouseButtonUp (1)) {
-
+				string posString = Camera.main.ScreenToWorldPoint (Input.mousePosition).ToString ();
+				foreach (Entity entity in Finder.SelectedEntities) {
+					try {
+						Actor actor = (Actor)entity;
+						actor.brain.EndCurrentTasks ();
+						actor.brain.AddCommand ("UserMoveTo|" + posString);
+					} catch (InvalidCastException) {
+					}
+					
+				}
 			}
 			if (Input.GetMouseButtonUp (0)) {	
 				selectMode = false;
@@ -55,6 +63,13 @@ namespace Cosmos
 				drawSelectRect ();
 			} else {
 				drawSelectRect (false);
+			}
+			if (camLockMode) {
+				if (Finder.SelectedEntities.Count > 0) {
+					DrawManager.MoveCameraTo (Finder.SelectedEntities [0].Center);
+				} else {
+					camLockMode = false;
+				}
 			}
 			float d = Input.GetAxis ("Mouse ScrollWheel");
 			if (d > 0f) {
@@ -109,8 +124,12 @@ namespace Cosmos
 			if (IsKeyDown ("D")) {
 				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
 			}
-			if (IsKeyDown ("V")) {
-				DrawManager.MoveCameraTo (Finder.SelectedEntities [0].Center);
+			if (IsKeyDown ("V", true)) {
+				if (camLockMode) {
+					camLockMode = false;
+				} else {
+					camLockMode = true;
+				}
 			}
 			if (IsKeyDown ("SPACE")) {
 				TickManager.SwitchPauseState ();
@@ -173,17 +192,13 @@ namespace Cosmos
 				}
 			}
 
-			if (IsKeyDown ("PAGEUP")) {
+			if (IsKeyDown ("PAGEUP", true)) {
 				GameManager.currentGame.ChangeSystem (GameManager.currentGame.currentSystemID + 1);
 				Debug.Log (GameManager.currentGame.currentSystemID);
-				//Debug.Log (GalaxyManager.currentSystem.name);
-				RemoveKey ("PAGEUP");
 			}
-			if (IsKeyDown ("PAGEDOWN")) {
+			if (IsKeyDown ("PAGEDOWN", true)) {
 				GameManager.currentGame.ChangeSystem (GameManager.currentGame.currentSystemID - 1);
 				Debug.Log (GameManager.currentGame.currentSystemID);
-				//Debug.Log (GalaxyManager.currentSystem.name);
-				RemoveKey ("PAGEDOWN");
 			}
 
 		}
@@ -282,11 +297,13 @@ namespace Cosmos
 				KeyIsDown.Add (key, false);
 			}
 		}
-		public static bool IsKeyDown (string key)
+		public static bool IsKeyDown (string key, bool oneTimePress=false)
 		{			
 			bool keyCheck = false;
 			KeyIsDown.TryGetValue (key, out keyCheck);
-
+			if (oneTimePress) {				
+				RemoveKey (key);
+			}
 			return keyCheck;
 		}
 	}

@@ -20,6 +20,7 @@ namespace Cosmos
 		public float HungerDamage = 0.25f;
 		public float ThirstDamage = 0.5f;
 		//
+		public float GLimit = 10f;
 		public enum HungerState
 		{
 			Satisfied,
@@ -76,7 +77,7 @@ namespace Cosmos
 		//		
 		private float timeSinceLastTick = 0;
 		private float lastTime = 0;
-		public Dictionary<string,Limb> Limbs;
+		public Dictionary<string,List<Limb>> Limbs;
 
 		public float Life {
 			get {
@@ -88,7 +89,7 @@ namespace Cosmos
 		{
 			Parent = parent;
 			MaxLife = maxLife;
-			Limbs = new Dictionary<string, Limb> ();
+			Limbs = new Dictionary<string, List<Limb>> ();
 		}
 
 		public float GetLife ()
@@ -113,8 +114,10 @@ namespace Cosmos
 				Damage (ThirstDamage * timeSinceLastTick);
 			}
 			//Limb Status
-			foreach (Limb limb in Limbs.Values) {
-				life += MaxLife * (limb.Integrity / MaxLimbLife);
+			foreach (List<Limb> limbs in Limbs.Values) {
+				foreach (Limb limb in limbs) {
+					life += MaxLife * (limb.Integrity / MaxLimbLife);
+				}
 			}
 			if (life <= 0) {
 				Parent.QueForUpdate ();
@@ -122,9 +125,9 @@ namespace Cosmos
 			return life;
 		}
 
-		public Limb GetLimb (string limb)
+		public List<Limb> GetLimbs (string limb)
 		{
-			Limb value = null;
+			List<Limb> value = null;
 			Limbs.TryGetValue (limb, out value);
 			return value;
 		}
@@ -149,7 +152,12 @@ namespace Cosmos
 				DamageLimb (damage, limb);
 			} else {
 				List<Limb> allLimbs = new List<Limb> ();
-				allLimbs.AddRange (Limbs.Values);
+				foreach (List<Limb> limbs in Limbs.Values) {
+					foreach (Limb tLimb in limbs) {
+						allLimbs.Add (tLimb);
+					}
+				}
+
 				List<Limb> intactLimbs = allLimbs.FindAll (
 					delegate(Limb ilimb) {
 					return ilimb.Integrity > 0;
@@ -169,10 +177,12 @@ namespace Cosmos
 		public void DamageLimb (float damage, string limb="")
 		{
 			if (Limbs.ContainsKey (limb)) {
-				if (Limbs [limb].Integrity > 0) {
-					Limbs [limb].Integrity -= damage;
+				List<Limb> limbs = Limbs [limb];
+				Limb tLimb = limbs [(int)Random.Range (0, limbs.Count)];
+				if (tLimb .Integrity > 0) {
+					tLimb .Integrity -= damage;
 				} else {
-					Limbs [limb].Integrity = 0;
+					tLimb .Integrity = 0;
 				}
 			}
 			/*else{
@@ -189,14 +199,22 @@ namespace Cosmos
 			return str;
 		}
 
-		public void AddLimb (string name, float integrity, Limb.Condition condition = Limb.Condition.Normal)
+		public Limb AddLimb (string name, float integrity, Limb inputLimb=null, Limb.Condition condition = Limb.Condition.Normal)
 		{
-			if (!Limbs.ContainsKey (name)) {
-				Limbs.Add (name, new Limb (condition, integrity));
-				MaxLimbLife += integrity;
+			Limb newLimb;
+			if (inputLimb == null) {
+				newLimb = new Limb ().Init (condition, integrity);
+			} else {
+				newLimb = inputLimb;
 			}
-		}
 
+			if (!Limbs.ContainsKey (name)) {
+				Limbs.Add (name, new List<Limb> ());
+			}
+			Limbs [name].Add (newLimb);
+			MaxLimbLife += integrity;
+			return newLimb;
+		}
 		public override string ToString ()
 		{
 			return GetStatus ();

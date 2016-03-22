@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Vectrosity;
 
 namespace Cosmos
 {
@@ -16,6 +17,8 @@ namespace Cosmos
 		public static GameState curGameState = GameState.MainMenu;		
 		public static Vector3 screenPos = new Vector3 (0, 0, 0);
 		public static Game currentGame;
+		private static List<DebugLine> debugLineList = new List<DebugLine> ();
+		private static List<VectorLine> debugVectorLines = new List<VectorLine> ();
 		public static void NewGame (float Seed, Vector3 MapSize)
 		{
 
@@ -69,8 +72,40 @@ namespace Cosmos
 			DrawManager.Draw ();
 			UIManager.Update ();
 			//Profiler.ExposeStrings ();
+			DrawDebugLines ();
 
 		}
 
+		private static void DrawDebugLines ()
+		{
+			VectorLine.Destroy (debugVectorLines);
+			debugVectorLines = new List<VectorLine> ();
+			foreach (DebugLine dLine in debugLineList) {
+
+				Vector3[] pts = new Vector3[2]{dLine.Start,dLine.End};
+				VectorLine debugLine = VectorLine.SetLine3D (dLine.lColor, pts);
+				debugVectorLines.Add (debugLine);
+			}
+			debugLineList.Clear ();
+		}
+
+		public static void DrawLine (Vector3 start, Vector3 end, Color color)
+		{
+			debugLineList.Add (new DebugLine (start, end, color));
+		}
+
+		private class DebugLine
+		{
+			public Vector3 Start;
+			public Vector3 End;
+			public Color lColor;
+			public DebugLine (Vector3 start, Vector3 end, Color color)
+			{
+				Start = start;
+				End = end;
+				lColor = color;
+			}
+		}
 	}
+
 }

@@ -139,6 +139,16 @@ namespace Cosmos
 			y *= y;
 			return (min <= x + y) && (x + y <= max);
 		}
+		public static float DegToQuat (float rotation)
+		{
+			rotation = rotation % 360;
+			if (rotation >= 270 || rotation < 90) {
+				rotation += 90;
+			} else if (rotation >= 90 && rotation < 270) {
+				rotation -= 270;
+			}
+			return rotation % 360;
+		}
 	}
 
 }

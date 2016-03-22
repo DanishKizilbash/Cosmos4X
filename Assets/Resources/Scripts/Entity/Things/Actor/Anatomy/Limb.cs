@@ -12,10 +12,15 @@ namespace Cosmos
 		;
 		public Condition Status;
 		public float Integrity;
-		public Limb (Condition condition, float integrity)
+		public Limb ()
+		{
+		
+		}
+		public Limb Init (Condition condition, float integrity)
 		{
 			Status = condition;
 			Integrity = integrity;
+			return this;
 		}
 	}
 }

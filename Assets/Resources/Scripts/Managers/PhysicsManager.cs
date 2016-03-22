@@ -6,6 +6,7 @@ namespace Cosmos
 {
 	public static class PhysicsManager
 	{
+		public static float GValue = 0.5f;
 		public static List<PhysicsObject> physicsList = new List<PhysicsObject> ();
 		public static void Update ()
 		{

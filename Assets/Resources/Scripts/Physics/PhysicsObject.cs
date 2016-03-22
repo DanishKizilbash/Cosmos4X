@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Cosmos
 {
@@ -16,6 +17,8 @@ namespace Cosmos
 		public float localDrag;
 		public float dragCoeff;
 		public float momentOfInertia;
+		//
+		public List<Force> constantForces;
 		public Vector3 directionVector {
 			get {
 				float fixedRot = Mathf.Deg2Rad * ((thing.rotation + 90) % 360);
@@ -26,6 +29,7 @@ namespace Cosmos
 		}
 		public PhysicsObject (Thing target, Vector3 Dimensions, float Mass =100f)
 		{
+			ClearForces ();
 			thing = target;
 			deltaPos = new Vector3 (0, 0, 0);
 			velocity = new Vector3 (0, 0, 0);
@@ -39,13 +43,23 @@ namespace Cosmos
 			CalculateMomentOfInertia ();
 			PhysicsManager.Add (this);
 		}
-		public void ApplyThrust (float x, float y, float z, Vector3 offset, bool relativeToRotation=true)
+		public void ApplyForce (float x, float y, float z, Vector3 offset, bool relativeToRotation=true)
 		{
-			ApplyThrust (new Vector3 (x, y, z), offset, relativeToRotation);
+			ApplyForce (new Vector3 (x, y, z), offset, relativeToRotation);
 		}
-		public void ApplyThrust (Vector3 thrustVector, Vector3 offset, bool relativeToRotation=true)
+		public void ApplyForce (Vector3 thrustVector, Vector3 offset, bool relativeToRotation=true)
 		{			
-			ComputeForceAndTorque (thrustVector, offset, relativeToRotation);
+			Vector3 point = offset;
+			Vector3 force = thrustVector;
+			if (relativeToRotation) {
+				ApplyForceAndTorque (ComputeRelativeForce (thrustVector), ComputeTorque (thrustVector, offset));
+				force = ComputeRelativeForce (thrustVector);
+			} else {
+				ApplyForceAndTorque (thrustVector, ComputeTorque (thrustVector, offset));
+			}
+			Vector3 tPt = MathI.RotateVector (thing.Position + centerOfMass + point, thing.Position + centerOfMass, thing.rotation);
+
+			//GameManager.DrawLine (tPt, tPt - (force * 50), Color.red);
 		}
 		public void UpdatePosition ()
 		{
@@ -56,34 +70,40 @@ namespace Cosmos
 		}
 		public void Update ()
 		{
+			foreach (Force force in constantForces) {
+				ApplyForce (force.vector, force.offset);
+			}
 			ApplyFriction ();
 			deltaPos += velocity;
 			deltaRot += angularVelocity.z;
 			UpdatePosition ();
 			//Vel
-			Debug.DrawLine (centerOfMass + thing.Position, thing.Position + (velocity * 100), Color.white);
+			if (velocity.magnitude > 0.01f) {
+				GameManager.DrawLine (centerOfMass + thing.Position, centerOfMass + thing.Position + (velocity * 10), Color.white);
+			}
 			//COM
-			Debug.DrawLine (centerOfMass + thing.Position + Vector3.up * 0.1f, centerOfMass + thing.Position - Vector3.up * 0.1f, Color.blue);
-			Debug.DrawLine (centerOfMass + thing.Position + Vector3.left * 0.1f, centerOfMass + thing.Position - Vector3.left * 0.1f, Color.blue);
+			//GameManager.DrawLine (centerOfMass + thing.Position + Vector3.up * 0.1f, centerOfMass + thing.Position - Vector3.up * 0.1f, Color.blue);
+			//GameManager.DrawLine (centerOfMass + thing.Position + Vector3.left * 0.1f, centerOfMass + thing.Position - Vector3.left * 0.1f, Color.blue);
 			//Debug.Log ("Velocity(x100) : " + (velocity * 100) + " || Angular Velocity(x100) " + (angularVelocity * 100));
 		}
-		void ComputeForceAndTorque (Vector3 force, Vector3 point, bool relativeToRotation)
+		public Vector3 ComputeTorque (Vector3 force, Vector3 point)
 		{		
 			Vector3 torque = Vector3.Cross (point, force);
-			//Debug.Log ("force(x100) : " + (force * 100) + ", Offset " + (point) + " and MOA : " + momentOfInertia + " = torque " + torque * 100);
-
-			Vector3 tPt = MathI.RotateVector (centerOfMass + point + thing.Position, thing.Position + centerOfMass, thing.rotation);
-
-			if (relativeToRotation) {
-				force = MathI.RotateVector (force, Vector3.zero, thing.rotation);
-				point = MathI.RotateVector (point, centerOfMass, thing.rotation);
-			}
+			return torque;
+		}
+		public Vector3 ComputeRelativeForce (Vector3 force)
+		{
+			return MathI.RotateVector (force, Vector3.zero, thing.rotation);
+		}
+		public Vector3 ComputeAngularVelocity (Vector3 torque)
+		{
+			return  torque / momentOfInertia;
+		}
+		private void ApplyForceAndTorque (Vector3 force, Vector3 torque)
+		{
 			velocity += force / mass;
-			angularVelocity += torque / momentOfInertia;
+			angularVelocity += ComputeAngularVelocity (torque);
 
-			//Force
-
-			Debug.DrawLine (tPt, tPt - (force * 50), Color.red);
 		}
 
 		private void ApplyFriction ()
@@ -99,12 +119,20 @@ namespace Cosmos
 			float m = mass;
 			float w = dimensions.x;
 			float h = dimensions.y;
-			momentOfInertia = m * (w * w + h * h) / 12;
+			momentOfInertia = m * (w * w + h * h) / 24;//12
 		}
 		private void CalculateCenterOfMass ()
 		{
 			centerOfMass = new Vector3 (0.5f, -0.5f, 0.0f);
 			thing.rotationPoint = centerOfMass;
+		}
+		public void AddConstantForce (Force force)
+		{
+			constantForces.Add (force);			
+		}
+		public void ClearForces ()
+		{
+			constantForces = new List<Force> ();
 		}
 	}
 }
