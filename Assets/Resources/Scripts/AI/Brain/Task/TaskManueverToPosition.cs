@@ -11,6 +11,7 @@ namespace Cosmos.AI
 		{
 			distanceBuffer = brain.actor.scale.magnitude * 2;
 			Vector3 targetPos = (Vector3)input;
+			//Debug.Log (brain.actor.Position);
 			if (Mathf.Abs ((brain.actor.Position - targetPos).magnitude) <= distanceBuffer) {
 				brain.actor.ComeToHalt ();
 				if (brain.actor.isHalted) {

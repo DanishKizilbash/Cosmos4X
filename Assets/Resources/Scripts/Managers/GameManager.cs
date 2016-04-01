@@ -21,18 +21,23 @@ namespace Cosmos
 		private static List<VectorLine> debugVectorLines = new List<VectorLine> ();
 		public static void NewGame (float Seed, Vector3 MapSize)
 		{
-
 			Profiler.Start ();
 			Debug.Log ("Loading New Game");
 			curGameState = GameState.GameLoading;
+
+			InitManagers ();
+			AddManagersToTicker ();
+			currentGame = new Game ();
+			currentGame.Start ();
+			curGameState = GameState.GameRunning;
+		}
+		private static void InitManagers ()
+		{
 			Loader.Init ();
 			//Load textures and generate atlases
 			TextureManager.Init (128);
 			//Initiate render managers
-			DrawManager.Init ();
-
-			//Generate/Parse World
-			//Gen.WorldGen.Initiate ();			
+			DrawManager.Init ();					
 			//Initiate Tick Manager
 			TickManager.Init ();
 			//Initiate User Control
@@ -42,38 +47,25 @@ namespace Cosmos
 			//Create Galaxy
 			GalaxyManager.Init ();
 			UIManager.Init ();
-			currentGame = new Game ();
-			currentGame.Start ();
-			curGameState = GameState.GameRunning;
 		}
-		public static void PauseGame ()
+		private static void AddManagersToTicker ()
 		{
-			curGameState = GameState.GamePaused;
-		}
-		public static void ResumeGame ()
-		{
-			curGameState = GameState.GameRunning;
+			//Add Fps Independant managers to ticker
+			TickManager.AddPersistant (PhysicsManager.Update);
+			TickManager.AddPersistant (JobManager.Update);
+			TickManager.AddPersistant (Finder.Update);
 		}
 		public static void Update ()
 		{
-			if (curGameState == GameState.GameRunning) {
-				PhysicsManager.Update ();
-				JobManager.Update ();
-				TickManager.Update ();
-				currentGame.Update ();
-			}
+			TickManager.Update ();
 			InputManager.Update ();
 		}
 		public static void LateUpdate ()
 		{
-			if (curGameState == GameState.GameRunning) {	
-				Finder.Update ();
-			}
 			DrawManager.Draw ();
 			UIManager.Update ();
 			//Profiler.ExposeStrings ();
-			DrawDebugLines ();
-
+			//DrawDebugLines ();
 		}
 
 		private static void DrawDebugLines ()
@@ -81,7 +73,6 @@ namespace Cosmos
 			VectorLine.Destroy (debugVectorLines);
 			debugVectorLines = new List<VectorLine> ();
 			foreach (DebugLine dLine in debugLineList) {
-
 				Vector3[] pts = new Vector3[2]{dLine.Start,dLine.End};
 				VectorLine debugLine = VectorLine.SetLine3D (dLine.lColor, pts);
 				debugVectorLines.Add (debugLine);

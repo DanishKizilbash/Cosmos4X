@@ -14,7 +14,7 @@ namespace Cosmos
 			name = Name;
 			value = Value;
 			entity = ParentEntity;
-			Finder.ResourceDatabase.Add (this);
+			Finder.resourceDatabase.Add (this);
 		}
 		public float Add (float qty)
 		{
@@ -41,7 +41,7 @@ namespace Cosmos
 			entity = null;
 			value = 0;
 			name = "";
-			Finder.ResourceDatabase.Remove (this);
+			Finder.resourceDatabase.Remove (this);
 		}
 		public bool Merge (Resource resource)
 		{

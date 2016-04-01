@@ -23,5 +23,9 @@ namespace Cosmos.AI
 		{
 			base.Analyze ();
 		}
+		public override void OnSelected (bool value)
+		{
+
+		}
 	}
 }

@@ -39,5 +39,12 @@ namespace Cosmos
 				Debug.Log (res.name + ": " + res.value);
 			}
 		}
+		public void Destroy ()
+		{
+			entity = null;
+			foreach (Resource resource in resList.Values) {
+				resource.Destroy ();
+			}
+		}
 	}
 }

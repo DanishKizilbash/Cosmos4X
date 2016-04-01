@@ -44,7 +44,7 @@ namespace Cosmos
 		private static void FindTextureCategories ()
 		{
 			textureCategories = new List<string> ();
-			List<object> textures = Finder.TextureDatabase.GetAll ();
+			List<object> textures = Finder.textureDatabase.GetAll ();
 			foreach (object obj in textures) {
 				string name = ((Texture2D)obj).name;
 				string category = name.Substring (0, name.IndexOf ("_"));
@@ -57,7 +57,7 @@ namespace Cosmos
 		{
 			Debug.Log ("----Start Texture List Fill----");
 			foreach (string cat in textureCategories) {
-				List<Texture2D> curTexList = Finder.TextureDatabase.GetTexturesOfType (cat);
+				List<Texture2D> curTexList = Finder.textureDatabase.GetTexturesOfType (cat);
 				textures.Add (cat, curTexList);
 				Debug.Log (textures [cat].Count + " " + cat + "s found");
 				int maxWidth = 1;

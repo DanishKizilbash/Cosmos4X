@@ -17,7 +17,7 @@ namespace Cosmos
 			}
 			scale = Scale;
 			Init ();
-			Finder.GraphicDatabase.Add (this);
+			Finder.graphicDatabase.Add (this);
 		}
 
 		public void Init ()
@@ -26,7 +26,7 @@ namespace Cosmos
 		}
 		private void FindAtlas ()
 		{
-			spriteAtlas = (SpriteAtlas)Finder.SpriteAtlasDatabase.Get (name);
+			spriteAtlas = (SpriteAtlas)Finder.spriteAtlasDatabase.Get (name);
 			if (spriteAtlas != null) {
 				atlasVector = spriteAtlas.GetTextureVector (name);
 			}

@@ -29,7 +29,7 @@ namespace Cosmos
 			childTextures = new List<List<Texture2D>> ();
 			texturePositions = new Dictionary<string, Vector2> ();
 			mergedTextures = new List<Texture2D> ();
-			Finder.SpriteAtlasDatabase.Add (this);
+			Finder.spriteAtlasDatabase.Add (this);
 
 		}
 		public void Init ()

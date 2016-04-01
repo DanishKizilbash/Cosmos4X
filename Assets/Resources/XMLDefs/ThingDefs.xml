@@ -51,7 +51,7 @@
 		  	<Function>Wood</Function>
 		    <TextureID>Resource_Log</TextureID>
 		    <Value>10</Value>
-		    <Decay>7200</Decay>
+		    <Decay>7200</Decay> 
 		  </AppleWood>
 		  <PineWood>
 		  	<Function>Wood</Function>
@@ -67,6 +67,7 @@
 		    <TextureID>Ship_Escort</TextureID>
 		    <Life>20</Life>
 		    <Work>1</Work>
+		    <ConstructionPoints>1200</ConstructionPoints>
 		  </Escort>
 		</Ship>
 	</Actor>

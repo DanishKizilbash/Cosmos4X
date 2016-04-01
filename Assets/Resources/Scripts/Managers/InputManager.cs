@@ -8,7 +8,12 @@ namespace Cosmos
 {
 	public static class InputManager
 	{
-		public static float CameraSpeed = 1f;
+		public static float baseCameraSpeed = 0.5f ;
+		public static float CameraSpeed {
+			get {
+				return baseCameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize);
+			}
+		}
 		public static float CameraEase = 0.1f;
 		public static Dictionary<string,bool> KeyIsDown = new Dictionary<string, bool> ();
 		private static Entity lastSelectedEntity;
@@ -18,6 +23,9 @@ namespace Cosmos
 		private static Rect selectRect;
 		private static VectorLine selectLine;
 		public static bool camLockMode = false;
+		public static bool mouseMoveMode = false;
+		public static Vector3 mouseMoveDistance;
+		public static Vector3 previousMousePos;
 		public static Vector3 worldMousePos {
 			get {
 				return mainCam.ScreenToWorldPoint (Input.mousePosition);
@@ -31,42 +39,67 @@ namespace Cosmos
 	
 		public static void Update ()
 		{
+			mouseMoveDistance = mainCam.ScreenToWorldPoint (previousMousePos) - worldMousePos;
 			mainCam = Camera.main;
 			CheckKeyDown ();
 			CheckKeyUp ();
 			ActOnKeys ();
 
-			//
-
-			if (Input.GetMouseButtonUp (1)) {
-				string posString = Camera.main.ScreenToWorldPoint (Input.mousePosition).ToString ();
-				foreach (Entity entity in Finder.SelectedEntities) {
-					try {
-						Actor actor = (Actor)entity;
-						actor.brain.EndCurrentTasks ();
-						actor.brain.AddCommand ("UserMoveTo|" + posString);
-					} catch (InvalidCastException) {
+			//Mouse
+			if (!UIManager.hasMouseFocus) {
+				if (Input.GetMouseButton (1)) {
+					if (Math.Abs (mouseMoveDistance.magnitude) > 0.1f) {
+						mouseMoveMode = true;
 					}
-					
+					if (mouseMoveMode) {
+						DrawManager.MoveCameraBy (mouseMoveDistance);
+					}
 				}
-			}
-			if (Input.GetMouseButtonUp (0)) {	
-				selectMode = false;
-				selectInRect (selectRect);
-			}
-			if (Input.GetMouseButtonDown (0)) {
-				selectOrig = worldMousePos;
-				selectMode = true;
+				if (Input.GetMouseButtonUp (1)) {
+					if (!mouseMoveMode) {
+						if (Finder.selectedFleet == null) {
+							string posString = worldMousePos.ToString ();
+							foreach (Entity entity in Finder.selectedEntities) {
+								try {
+									Actor actor = (Actor)entity;
+									actor.brain.EndCurrentTasks ();
+									actor.brain.AddCommand ("UserMoveTo|" + posString);
+								} catch (InvalidCastException) {
+								}
+							}
+						} else {
+							Finder.selectedFleet.FleetMoveTo (worldMousePos);
+						}
+					} else {
+						mouseMoveMode = false;
+					}
+				}
+				if (Input.GetMouseButtonUp (0)) {
+					if (Finder.selectedFleet != null) {
+						Finder.selectedFleet.isSelected = false;
+					}
+					selectMode = false;
+					if (selectRect.size.magnitude < 0.05f) {
+						SelectAtPoint (worldMousePos);
+					} else {
+						SelectInRect (selectRect);
+					}
+				}
+				if (Input.GetMouseButtonDown (0)) {
+					selectOrig = worldMousePos;
+					selectMode = true;
+				}
 			}
 			if (selectMode) {
 				selectRect = MathI.RectFromPoints (selectOrig, worldMousePos);
-				drawSelectRect ();
+				DrawSelectRect ();
+
 			} else {
-				drawSelectRect (false);
+				DrawSelectRect (false);
 			}
 			if (camLockMode) {
-				if (Finder.SelectedEntities.Count > 0) {
-					DrawManager.MoveCameraTo (Finder.SelectedEntities [0].Center);
+				if (Finder.selectedEntities.Count > 0) {
+					DrawManager.MoveCameraTo (Finder.selectedEntities [0].Center);
 				} else {
 					camLockMode = false;
 				}
@@ -78,16 +111,21 @@ namespace Cosmos
 			} else if (d < 0f) {
 				GameManager.currentGame.zoom++;
 			}
+			previousMousePos = Input.mousePosition;
 		}
-		public static void selectInRect (Rect rect)
+		public static void SelectInRect (Rect rect)
 		{
 			foreach (Entity entity in GameManager.currentGame.currentSystem.entities) {
-
-				entity.isSelected = entity.InRect (rect);
-							
+				entity.isSelected = entity.InRect (rect);							
 			}
 		}
-		private static void drawSelectRect (bool visible=true)
+		public static void SelectAtPoint (Vector3 Point)
+		{
+			foreach (Entity entity in GameManager.currentGame.currentSystem.entities) {
+				entity.isSelected = entity.PointInside (Point);				
+			}
+		}
+		private static void DrawSelectRect (bool visible=true)
 		{
 			selectLine.MakeRect (selectRect);
 			selectLine.Draw3DAuto ();
@@ -113,16 +151,16 @@ namespace Cosmos
 		public static void ActOnKeys ()
 		{
 			if (IsKeyDown ("W")) {
-				DrawManager.MoveCameraBy (new Vector2 (0.0f, 1.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
+				DrawManager.MoveCameraBy (new Vector2 (0.0f, 1.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("S")) {
-				DrawManager.MoveCameraBy (new Vector2 (0.0f, -1.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
+				DrawManager.MoveCameraBy (new Vector2 (0.0f, -1.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("A")) {
-				DrawManager.MoveCameraBy (new Vector2 (-1.0f, 0.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
+				DrawManager.MoveCameraBy (new Vector2 (-1.0f, 0.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("D")) {
-				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed * (float)Math.Sqrt (Camera.main.orthographicSize));
+				DrawManager.MoveCameraBy (new Vector2 (1.0f, 0.0f) * CameraSpeed);
 			}
 			if (IsKeyDown ("V", true)) {
 				if (camLockMode) {
@@ -131,19 +169,28 @@ namespace Cosmos
 					camLockMode = true;
 				}
 			}
-			if (IsKeyDown ("SPACE")) {
+			if (IsKeyDown ("SPACE", true)) {
 				TickManager.SwitchPauseState ();
-				RemoveKey ("SPACE");
+			}
+			if (IsKeyDown ("TAB", true)) {
+				if (Finder.selectedEntities.Count > 1) {
+					Entity firstEntity = Finder.selectedEntities [0];
+					Finder.selectedEntities [0] = Finder.selectedEntities [Finder.selectedEntities.Count - 1];
+					Finder.selectedEntities [Finder.selectedEntities.Count - 1] = firstEntity;
+				}
 			}
 			if (IsKeyDown ("E")) {
-				Debug.Log ("E");
 				if (IsKeyDown ("LCONTROL")) {
-					Debug.Log ("lctrl");
-					foreach (Entity entity in Finder.SelectedEntities) {
-						entity.Destroy ();
+					List<Entity> entitiesQuedForDestruction = new List<Entity> ();
+					foreach (Entity entity in Finder.selectedEntities) {
+						entitiesQuedForDestruction.Add (entity);
+					}
+					Finder.selectedEntities.Clear ();
+					for (int i = 0; i<entitiesQuedForDestruction.Count; i++) {
+						entitiesQuedForDestruction [i].Destroy ();
 					}
 				} else {
-					foreach (Entity entity in Finder.SelectedEntities) {
+					foreach (Entity entity in Finder.selectedEntities) {
 						if (entity != null && !entity.isDestroyed) {
 							Thing thing;
 							try {
@@ -160,7 +207,7 @@ namespace Cosmos
 			}
 
 			if (IsKeyDown ("C")) {
-				foreach (Entity entity in Finder.SelectedEntities) {
+				foreach (Entity entity in Finder.selectedEntities) {
 					CelestialBody cb;
 					try {
 						cb = (CelestialBody)entity;
@@ -174,22 +221,26 @@ namespace Cosmos
 					}
 				}
 			}
-
-			if (IsKeyDown ("F")) {
-				foreach (Entity entity in Finder.SelectedEntities) {
-					CelestialBody cb;
+			if (IsKeyDown ("T", true)) {
+				List<ActorShip> ships = new List<ActorShip> ();
+				foreach (Entity entity in Finder.selectedEntities) {
+					ActorShip ship;
 					try {
-						cb = (CelestialBody)entity;
+						ship = (ActorShip)entity;
 					} catch (InvalidCastException) {
-						cb = null;
+						ship = null;
 					}
-					if (cb != null) {
-						if (cb.colony != null) {
-							cb.colony.BuildShip ();
-						}
+					if (ship != null) {
+						ships.Add (ship);
 					}
+				}
+				if (ships.Count > 0) {
+					new Fleet (ships).isSelected = true;
 
 				}
+			}
+			if (IsKeyDown ("F")) {
+				EntityManager.AddShip (1, new Vector3 (worldMousePos.x, worldMousePos.y, 0), GameManager.currentGame.currentSystemID, null, true);
 			}
 
 			if (IsKeyDown ("PAGEUP", true)) {
@@ -199,6 +250,14 @@ namespace Cosmos
 			if (IsKeyDown ("PAGEDOWN", true)) {
 				GameManager.currentGame.ChangeSystem (GameManager.currentGame.currentSystemID - 1);
 				Debug.Log (GameManager.currentGame.currentSystemID);
+			}
+			if (IsKeyDown (".", true)) {
+				TickManager.tickSpeedMultiplier += 0.5f;
+			}
+			if (IsKeyDown (",", true)) {
+				if (TickManager.tickSpeedMultiplier > 0.5f) {
+					TickManager.tickSpeedMultiplier -= 0.5f;
+				}
 			}
 
 		}
@@ -222,12 +281,18 @@ namespace Cosmos
 			if (Input.GetKeyDown (KeyCode.F)) {
 				AddKey ("F");
 			}
+			if (Input.GetKeyDown (KeyCode.T)) {
+				AddKey ("T");
+			}
 			if (Input.GetKeyDown (KeyCode.C)) {
 				AddKey ("C");
 			}
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				AddKey ("SPACE");
-			}					
+			}	
+			if (Input.GetKeyDown (KeyCode.Tab)) {
+				AddKey ("TAB");
+			}	
 			if (Input.GetKeyDown (KeyCode.E)) {
 				AddKey ("E");
 			}
@@ -239,6 +304,12 @@ namespace Cosmos
 			}
 			if (Input.GetKeyDown (KeyCode.PageDown)) {
 				AddKey ("PAGEDOWN");
+			}
+			if (Input.GetKeyDown (KeyCode.Period)) {
+				AddKey (".");
+			}
+			if (Input.GetKeyDown (KeyCode.Comma)) {
+				AddKey (",");
 			}
 		}
 		public static void CheckKeyUp ()
@@ -262,12 +333,18 @@ namespace Cosmos
 			if (Input.GetKeyUp (KeyCode.F)) {
 				RemoveKey ("F");
 			}
+			if (Input.GetKeyUp (KeyCode.T)) {
+				RemoveKey ("T");
+			}
 			if (Input.GetKeyUp (KeyCode.C)) {
 				RemoveKey ("C");
 			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
 				RemoveKey ("SPACE");
 			}	
+			if (Input.GetKeyUp (KeyCode.Tab)) {
+				RemoveKey ("TAB");
+			}
 			if (Input.GetKeyUp (KeyCode.E)) {
 				RemoveKey ("E");
 			}
@@ -279,6 +356,12 @@ namespace Cosmos
 			}
 			if (Input.GetKeyUp (KeyCode.PageDown)) {
 				RemoveKey ("PAGEDOWN");
+			}
+			if (Input.GetKeyUp (KeyCode.Period)) {
+				RemoveKey (".");
+			}
+			if (Input.GetKeyUp (KeyCode.Comma)) {
+				RemoveKey (",");
 			}
 		}
 		public static void AddKey (string key)

@@ -7,8 +7,8 @@ namespace Cosmos
 	{
 		public static Vector3 StringToVector3 (string str)
 		{
-			if (!str.StartsWith ("(")) {
-				return new Vector3 (float.MaxValue, float.MaxValue, float.MaxValue);
+			if (str == null || !str.StartsWith ("(")) {
+				return new Vector3 (Mathf.Infinity, Mathf.Infinity, Mathf.Infinity);
 			}
 			float x;
 			float y;
@@ -22,6 +22,7 @@ namespace Cosmos
 			float.TryParse (strings [3], out z);
 			//
 			return new Vector3 (x, y, z);
+
 		}
 		public static Vector3 StringToVector2 (string str)
 		{
@@ -54,6 +55,14 @@ namespace Cosmos
 				return val;
 			}
 			return 0;
+		}
+		public static bool StringToBool (string str)
+		{
+			str = str.ToLower ();
+			if (str == "true") {
+				return true;
+			}
+			return false;
 		}
 	}
 }

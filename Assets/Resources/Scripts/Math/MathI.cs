@@ -5,7 +5,7 @@ namespace Cosmos
 {
 	public static class MathI
 	{
-
+		public static Vector3 InfinityVector = new Vector3 (Mathf.Infinity, Mathf.Infinity, Mathf.Infinity);
 		public static bool PointInRectangle (Vector3 point, Rect rectangle)
 		{
 			if (point.x < rectangle.xMax && point.x > rectangle.xMin) {
@@ -96,7 +96,7 @@ namespace Cosmos
 			xP += rotationPoint.x;
 			yP += rotationPoint.y;
 
-			return new Vector3 (xP, yP, 0);
+			return new Vector3 (xP, yP, z);
 		}
 		public static Vector3 RotateVector (Vector3 point, Vector3 rotationPoint, float rotation)
 		{

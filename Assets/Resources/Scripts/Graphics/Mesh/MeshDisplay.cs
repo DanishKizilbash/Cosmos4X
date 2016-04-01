@@ -136,7 +136,10 @@ namespace Cosmos
 		public void UpdatePosition ()
 		{
 			if (entity != null) {
-				gameObject.transform.position = MathI.RotateVector (entity.Position, entity.Position + entity.rotationPoint, entity.rotation);
+				UpdateScale ();
+				gameObject.transform.position = MathI.RotateVector (entity.ScreenPosition, entity.ScreenPosition + entity.rotationPoint, entity.rotation);
+			} else {
+				MeshManager.CleanMeshDisplay (this);
 			}
 		}
 		public void Rotate ()
@@ -149,10 +152,12 @@ namespace Cosmos
 		}
 		public void UpdateScale ()
 		{
-			Vector2 scale = entity.scale;
-			Vector3 scaleVec = new Vector3 (MathI.RationalizeFloat (scale.x, 4), MathI.RationalizeFloat (scale.y, 4), 0);
-			if (gameObject.transform.localScale != scaleVec) {
-				gameObject.transform.localScale = scaleVec;
+			if (entity != null) {
+				Vector2 scale = entity.scale;
+				Vector3 scaleVec = new Vector3 (MathI.RationalizeFloat (scale.x, 4), MathI.RationalizeFloat (scale.y, 4), 0);
+				if (gameObject.transform.localScale != scaleVec) {
+					gameObject.transform.localScale = scaleVec;
+				}
 			}
 		}
 		public void setColor (Color color)

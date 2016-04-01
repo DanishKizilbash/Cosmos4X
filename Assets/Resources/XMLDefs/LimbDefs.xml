@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Limb>
+	<Default>
+		<Default>
+			<Default>
+		    	<TextureID>Flora_PineTree</TextureID>	
+		    	<Condition>1</Condition>	   
+		    	<Integrity>5</Integrity>
+		    	<ConstructionCost>50</ConstructionCost>
+		  	</Default>
+		</Default>
+	</Default>
+	<Ship>
+		<Bridge>
+			<BasicBridge>
+				<TextureID>Flora_PineTree</TextureID>	
+		    	<Condition>1</Condition>	   
+		    	<Integrity>10</Integrity>
+		    	<ConstructionCost>100</ConstructionCost>
+			</BasicBridge>
+		</Bridge>
+		<Thruster>
+			<BasicThruster>
+				<TextureID>Flora_PineTree</TextureID>	
+		    	<Condition>1</Condition>	   
+		    	<Integrity>5</Integrity>
+		    	<ConstructionCost>50</ConstructionCost>
+		    	<IsRCS>false</IsRCS>
+			</BasicThruster>
+			<BasicRCSThruster>
+				 <TextureID>Flora_PineTree</TextureID>	
+		    	<Condition>1</Condition>	   
+		    	<Integrity>5</Integrity>
+		    	<ConstructionCost>20</ConstructionCost>
+		    	<IsRCS>true</IsRCS>
+			</BasicRCSThruster>
+		</Thruster>
+	</Ship>
+</Limb>

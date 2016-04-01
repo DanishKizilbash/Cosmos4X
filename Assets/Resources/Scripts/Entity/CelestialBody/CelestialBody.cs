@@ -78,7 +78,12 @@ namespace Cosmos
 		}
 		public override void Destroy ()
 		{
-			orbit.Destroy ();
+			if (orbit != null) {
+				orbit.Destroy ();
+			}
+			if (colony != null) {
+				colony.Destroy ();
+			}
 			system.RemoveEntity (this);
 			base.Destroy ();
 		}

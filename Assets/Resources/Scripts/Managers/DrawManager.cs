@@ -17,11 +17,13 @@ namespace Cosmos
 		public static float TargetSize = 1f;
 		public static float CameraEase = 0.2f;
 		public static Vector2 DisplaySize;
+		private static bool VectorCanvasFixed;
 		//
 		public static bool ZoomToMouse = true;
 
 		public static void Init (GameObject parent = null)
 		{
+
 			MainCamera = Camera.main.gameObject;
 			if (!IsInitiated) {
 				IsInitiated = true;
@@ -43,7 +45,11 @@ namespace Cosmos
 
 		public static void Draw ()
 		{
-
+			if (!VectorCanvasFixed) {
+				GameObject.Find ("VectorCanvas3D").GetComponent<RectTransform> ().position += Vector3.back * 99;
+				GameObject.Find ("VectorCanvas").GetComponent<RectTransform> ().position += Vector3.back * 99;
+				VectorCanvasFixed = true;
+			}
 			UpdateCameraPos ();
 			Profiler.Start ();
 
@@ -74,7 +80,7 @@ namespace Cosmos
 			} 
 			CameraPos += (TargetCameraPos - CameraPos) * CameraEase;
 			//
-			Camera.main.transform.position = new Vector3 (CameraPos.x, CameraPos.y, -1);
+			Camera.main.transform.position = new Vector3 (CameraPos.x, CameraPos.y, -100);
 			Camera.main.orthographicSize = CameraOrthoSize;
 
 		}

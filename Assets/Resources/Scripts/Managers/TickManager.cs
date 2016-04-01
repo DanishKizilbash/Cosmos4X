@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
@@ -7,10 +8,16 @@ namespace Cosmos
 {
 	public static class TickManager
 	{
+		public static float baseTPS = 60f;
+		public static float trueFPS;
+		private static float targetTickTime;
+		private static float fpsTimeTracker;
+		public static float tickSpeedMultiplier = 1f;
 		public static bool isPaused;
 		public static float processTime = 1f;
 		private static float previousTime;
 		private static float currentTime = Time.time;
+		private static float tickTime = 0f;
 		private static float cachedGameTime;
 
 		public static float GameTime {
@@ -28,6 +35,7 @@ namespace Cosmos
 		private static Dictionary<int,List<Tickable>> TickerList = new Dictionary<int,List<Tickable>> ();
 		private static List<Tickable> cachedTickerList = new List<Tickable> ();
 		private static List<Tickable> tickQue = new List<Tickable> ();
+		private static List<Action> persistantList = new List<Action> ();
 
 		public static void Init ()
 		{
@@ -35,22 +43,51 @@ namespace Cosmos
 				TickerList.Add (i, new List<Tickable> ());
 			}
 		}
-
+		public static void AddPersistant (Action action)
+		{
+			persistantList.Add (action);
+		}
 		public static void Update ()
 		{
 			if (!isPaused) {
-				currentTime += Time.time - previousTime;
-				previousTime = Time.time;
-				curTick++;
-				MergeTickerLists ();
-				CheckTickLists ();
-				PerformTicks ();
-				FinalizeRemoval ();
-				if (curTick >= maxTick) {
-					curTick = 0;
-				}			
-			} else {				
-				previousTime = Time.time;
+				float timeDiff = Time.time - previousTime;
+				currentTime += timeDiff;
+				tickTime += timeDiff;
+				fpsTimeTracker += timeDiff;
+				//
+				targetTickTime = (1000 / baseTPS / 1000) / tickSpeedMultiplier;	
+				int tickPerFrameRequired = Mathf.FloorToInt (tickTime / targetTickTime);
+				for (int t = 0; t<tickPerFrameRequired-2; t++) {
+					if (tickTime > targetTickTime) {
+						Tick ();
+						tickTime -= targetTickTime;
+					}
+				}
+			} 
+			previousTime = Time.time;
+		}
+		private static void Tick ()
+		{
+			curTick++;
+			MergeTickerLists ();
+			CheckTickLists ();
+			PerformTickables ();
+			FinalizeRemoval ();
+			PerformPersistantUpdates ();
+			if (curTick >= maxTick) {
+				curTick = 0;
+				if (fpsTimeTracker == 0) {
+					trueFPS = 1;
+				} else {
+					trueFPS = Mathf.Round (maxTick / fpsTimeTracker / tickSpeedMultiplier);
+				}
+				fpsTimeTracker = 0;
+			}			
+		}
+		private static void PerformPersistantUpdates ()
+		{
+			foreach (Action action in persistantList) {
+				action.Invoke ();
 			}
 		}
 		private static void CheckTickLists ()
@@ -70,7 +107,7 @@ namespace Cosmos
 				}
 			}
 		}
-		private static void PerformTicks ()
+		private static void PerformTickables ()
 		{
 			List<Tickable> cachedList = new List<Tickable> ();
 			float timeElapsed = 0;
@@ -142,10 +179,10 @@ namespace Cosmos
 		{
 			if (isPaused) {
 				isPaused = false;
-				GameManager.curGameState = GameManager.GameState.GamePaused;
+				GameManager.curGameState = GameManager.GameState.GameRunning;
 			} else {
 				isPaused = true;
-				GameManager.curGameState = GameManager.GameState.GameRunning;
+				GameManager.curGameState = GameManager.GameState.GamePaused;
 			}
 		}
 

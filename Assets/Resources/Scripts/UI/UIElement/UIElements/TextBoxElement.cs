@@ -7,7 +7,8 @@ namespace Cosmos
 {
 	public class TextBoxElement:UIElement
 	{	
-		Text textField = null;
+		public Text textField = null;
+		public float textBuffer = 4;
 		public override void SetUpElementProperties ()
 		{
 			base.SetUpElementProperties ();
@@ -18,10 +19,16 @@ namespace Cosmos
 			if (textField == null) {
 				textField = gameObject.GetComponent<Text> ();
 			}
-			textField.text = value;
-			if (value.Length * textField.fontSize / 2 > rectTransform.sizeDelta.x) {
-				rectTransform.sizeDelta = new Vector2 ((value.Length + 1) * textField.fontSize / 2, rectTransform.sizeDelta.y);
+			if (header == "") {
+				textField.text = value;
+			} else {
+				textField.text = header + " : " + value;
 			}
+
+		}
+		public override void Autofit ()
+		{
+			Resize (new Vector2 (textField.preferredWidth + textBuffer, rectTransform.rect.height));
 		}
 	}
 }

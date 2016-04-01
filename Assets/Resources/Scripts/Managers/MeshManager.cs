@@ -64,6 +64,7 @@ namespace Cosmos
 			MeshDisplay meshDisplay = meshDisplays [dispIter];
 			entity.meshDisplay = meshDisplay;
 			entity.meshDisplay.UpdateSpriteAtlas (entity.MainGraphic.spriteAtlas);
+			entity.meshDisplay.UpdateScale ();
 			meshDisplay.entity = entity;
 			dispIter++;
 		}

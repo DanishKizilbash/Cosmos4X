@@ -7,7 +7,6 @@ namespace Cosmos
 {
 	public class PlanetarySystem:Tickable
 	{
-		public string name;
 		public int ID;
 		public List<Entity> entities;
 		public List<CelestialBody> celestialBodies;
@@ -101,6 +100,10 @@ namespace Cosmos
 			foreach (Entity entity in entities) {		
 				entity.SetVisible (visiblity);
 			}
+
+		}
+		public override void OnSelected (bool value)
+		{
 
 		}
 		#region Gen

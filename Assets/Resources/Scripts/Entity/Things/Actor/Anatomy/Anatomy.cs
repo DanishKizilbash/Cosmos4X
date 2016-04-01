@@ -198,21 +198,31 @@ namespace Cosmos
 			str += "Thirst : " + curThirstState + System.Environment.NewLine;
 			return str;
 		}
+		public float GetConstructionCost ()
+		{
+			float cost = 0;
+			foreach (List<Limb> limbs in Limbs.Values) {
+				foreach (Limb tLimb in limbs) {
+					cost += tLimb.ConstructionCost;
+				}
+			}
+			return cost;
+		}
 
-		public Limb AddLimb (string name, float integrity, Limb inputLimb=null, Limb.Condition condition = Limb.Condition.Normal)
+		public Limb AddLimb (string Category, string defID="", Limb inputLimb=null)
 		{
 			Limb newLimb;
 			if (inputLimb == null) {
-				newLimb = new Limb ().Init (condition, integrity);
+				newLimb = new Limb ().Init (defID);
 			} else {
 				newLimb = inputLimb;
 			}
 
-			if (!Limbs.ContainsKey (name)) {
-				Limbs.Add (name, new List<Limb> ());
+			if (!Limbs.ContainsKey (Category)) {
+				Limbs.Add (Category, new List<Limb> ());
 			}
-			Limbs [name].Add (newLimb);
-			MaxLimbLife += integrity;
+			Limbs [Category].Add (newLimb);
+			MaxLimbLife += newLimb.Integrity;
 			return newLimb;
 		}
 		public override string ToString ()

@@ -42,9 +42,11 @@ namespace Cosmos.AI
 		public override void Tick ()
 		{
 			TickRequired = true;
-			Think ();
-			if (curIntent != null) {
-				//Debug.Log (curIntent.children [curIntent.curChild].ToString ());
+			if (actor.isConstructed) {			
+				Think ();
+				if (curIntent != null) {
+					//Debug.Log (curIntent.children [curIntent.curChild].ToString ());
+				}
 			}
 		}
 

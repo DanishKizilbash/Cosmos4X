@@ -20,5 +20,11 @@ namespace Cosmos
 				physicsList.Add (pObj);
 			}
 		}
+		public static void Remove (PhysicsObject pObj)
+		{
+			if (!physicsList.Contains (pObj)) {
+				physicsList.Remove (pObj);
+			}
+		}
 	}
 }

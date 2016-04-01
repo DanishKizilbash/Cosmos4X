@@ -49,7 +49,7 @@ namespace Cosmos
 				string tempName = tTex.name;
 				tTex.name = tempName;
 				Debug.Log ("Adding Texture: " + tempName);
-				Finder.TextureDatabase.Add (tTex);
+				Finder.textureDatabase.Add (tTex);
 			}
 		}
 

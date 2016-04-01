@@ -22,15 +22,15 @@ namespace Cosmos
 			}
 			set {
 				if (base.Name != null) {
-					Finder.ActorDatabase.UpdateKey (base.Name, value);
+					Finder.actorDatabase.UpdateKey (base.Name, value);
 				}
 				base.Name = value;
 			}
 		}
 		public bool isHalted {
 			get {
-				bool velHalted = physicsObject.velocity.magnitude < 0.001f;
-				bool angVelHalted = physicsObject.angularVelocity.magnitude < 0.001f;
+				bool velHalted = physicsObject.velocity.magnitude == 0;
+				bool angVelHalted = physicsObject.angularVelocity.magnitude == 0;
 				return velHalted && angVelHalted;
 			}
 		}
@@ -42,9 +42,11 @@ namespace Cosmos
 			Interval = brain.Interval;
 			AddAnatomy ();
 			SetLateAttributes ();
+			constructionPointsRequired += anatomy.GetConstructionCost ();
 			worker = new Worker (this);
-			Finder.ActorDatabase.Add (this);
-			targetPosLine = new VectorLine ("TargetPos_" + this.Name, new Vector3[64], null, 3.0f);
+			Finder.actorDatabase.Add (this);
+			displayDepth = 10;
+			targetPosLine = new VectorLine ("TargetPos_" + this.Name, new Vector3[2], null, 1.0f);
 			targetPosLine.color = Color.red;
 			return this;
 		}
@@ -62,40 +64,26 @@ namespace Cosmos
 		public override void Tick ()
 		{
 			//Movement
-
 			base.Tick ();
-			if (anatomy.Life <= 0) {
-				Die ();
-			}
-			if (isSelected) {
-				drawTargetPosLine ();
+			if (isConstructed) {
+				if (anatomy.Life <= 0) {
+					Die ();
+				}
 			} 
 			TickRequired = true;
 		}
 		public override void OnSelected (bool selected)
 		{
 			base.OnSelected (selected);
-			if (selected) {
-				targetPosLine.active = true;
-			} else {
-				targetPosLine.active = false;
-			}
 		}
 		public virtual void drawTargetPosLine ()
 		{
-			float rad = scale.x > scale.y ? scale.x / 2 : scale.y / 2;
-			targetPosLine.MakeCircle (targetPos, Vector3.forward, rad * 4, 8);
+			targetPosLine.points3 [0] = Center;
+			targetPosLine.points3 [1] = targetPos;
 			targetPosLine.Draw ();
 		}
 		public virtual void ComeToHalt ()
 		{
-			if (Mathf.Abs (physicsObject.angularVelocity.magnitude) < 0.01f) {
-				physicsObject.angularVelocity = Vector3.zero;
-				if (Mathf.Abs (physicsObject.velocity.magnitude) < 0.01f) {
-					physicsObject.velocity = Vector3.zero;
-				}
-			}
-
 			if (!isHalted) {
 				List<Limb> thrusterLimbs = anatomy.GetLimbs ("Thruster");
 				physicsObject.ClearForces ();
@@ -103,59 +91,39 @@ namespace Cosmos
 					ThrusterLimb limb = (ThrusterLimb)thrusterLimb;
 					float newThrottle = 0f;
 					if (limb.isRCS) {
-						//Rotation control
-						/*
-						float currentAngVel = physicsObject.angularVelocity.z;
-						float currentG = currentAngVel / PhysicsManager.GValue;
-						Vector3 maxTorque = physicsObject.ComputeTorque (limb.force, limb.offset);
-						float limbMaxAngVel = physicsObject.ComputeAngularVelocity (maxTorque).z;
-						float velIntervalsToNill = currentAngVel / limbMaxAngVel;
-						float torqueIntervalsToNillVel = currentAngVel / limbMaxAngVel;
-						float newVel = currentAngVel + limbMaxAngVel;
-						if (Mathf.Abs (newVel) < Mathf.Abs (currentAngVel)) {
-							newThrottle = Mathf.Abs (torqueIntervalsToNillVel / velIntervalsToNill);
-						}
-						*/
 						physicsObject.angularVelocity *= 0.98f;
 					} else {
 						physicsObject.velocity *= 0.98f;
-						/*
-						//Main Thrusters
-						Vector3 maxThrust = physicsObject.ComputeRelativeForce (limb.force);
-						angleToTarget = Mathf.Abs (angleToTarget);
-						float distToTarget = (target - Position).magnitude;
-						float distanceThrottle = distToTarget / physicsObject.velocity.magnitude;
-						Debug.Log (distanceThrottle);
-						if (angleToTarget > 0) {
-							if (angleToTarget > 90f) {
-								newThrottle = (throttleMaxAngle - (angleToTarget - 90f)) / throttleMaxAngle;
-							} else if (angleToTarget < 90f) {
-								newThrottle = (90 - (angleToTarget - (throttleMaxAngle - 90))) / throttleMaxAngle;
-							} else {
-								newThrottle = 1f;
-							}
-						}
-						*/
-
 					}
 				}
 			}
-			if (isSelected) {
-				drawTargetPosLine ();
-			} 
+			if (Mathf.Abs (physicsObject.angularVelocity.magnitude) < 0.005f) {
+				physicsObject.angularVelocity = Vector3.zero;
+				if (Mathf.Abs (physicsObject.velocity.magnitude) < 0.005f) {
+					physicsObject.velocity = Vector3.zero;
+				}
+			}
+		}
+		public override void MoveTo (Vector3 iposition)
+		{
+			base.MoveTo (iposition);
+			if (isSelected && !isHalted) {
+				drawTargetPosLine ();			
+				targetPosLine.active = true;
+			} else {
+				targetPosLine.active = false;
+			}
 		}
 		public virtual void MoveTowards (Vector3 target)
 		{
+			target.z = Position.z;
 			Vector3 targetVector = GetThrustVector (target);
-			ThrottleThrusters (targetVector);
-			if (isSelected) {
-				drawTargetPosLine ();
-			} 
+			ThrottleThrusters (targetVector, target);
 		}
-		public virtual void ThrottleThrusters (Vector3 target)
+		public virtual void ThrottleThrusters (Vector3 targetThrust, Vector3 targetPos)
 		{
-			float throttleMaxAngle = 30.0f;
-			//GameManager.DrawLine (Position + physicsObject.centerOfMass, Position + physicsObject.centerOfMass + target, Color.yellow);
+			float throttleMaxAngle = 15.0f;
+			GameManager.DrawLine (Position + physicsObject.centerOfMass, Position + physicsObject.centerOfMass + targetThrust * 200, Color.yellow);
 			//
 			//float angleToTarget = Mathf.Atan2 (target.y - pos.y, target.x - pos.x);
 			//
@@ -164,7 +132,7 @@ namespace Cosmos
 			foreach (Limb thrusterLimb in thrusterLimbs) {
 				ThrusterLimb limb = (ThrusterLimb)thrusterLimb;
 				float newThrottle = 0f;
-				float targetAngle = Mathf.Rad2Deg * Mathf.Atan2 (target.y, target.x);
+				float targetAngle = Mathf.Rad2Deg * Mathf.Atan2 (targetThrust.y, targetThrust.x);
 				float myAngle = MathI.DegToQuat (rotation);
 				float angleToTarget = Mathf.DeltaAngle (targetAngle, myAngle);
 				if (limb.isRCS) {
@@ -175,10 +143,10 @@ namespace Cosmos
 					float limbMaxAngVel = physicsObject.ComputeAngularVelocity (maxTorque).z;
 					//
 					bool accelerate = true;
-					int velIntervalsToTarget = Mathf.FloorToInt (angleToTarget / currentAngVel);
-					int torqueIntervalsToNillVel = Mathf.CeilToInt (currentAngVel / limbMaxAngVel);
+					float velIntervalsToTarget = (angleToTarget / currentAngVel);
+					float torqueIntervalsToNillVel = (currentAngVel / limbMaxAngVel);
 					//If can deccel in time and and moving towards target angle
-					if (Mathf.Abs (velIntervalsToTarget) < Mathf.Abs (torqueIntervalsToNillVel) + 20 && Mathf.Abs (angleToTarget + currentAngVel) < Mathf.Abs (angleToTarget)) {
+					if (Mathf.Abs (velIntervalsToTarget) < Mathf.Abs (torqueIntervalsToNillVel) + 30 && Mathf.Abs (angleToTarget + currentAngVel) < Mathf.Abs (angleToTarget)) {
 						accelerate = false;
 					}
 					//
@@ -186,7 +154,7 @@ namespace Cosmos
 					if (accelerate) {
 						if (Mathf.Abs (Mathf.DeltaAngle (myAngle + newVel, targetAngle)) < Mathf.Abs (Mathf.DeltaAngle (myAngle + currentAngVel, targetAngle))) {
 							if (newVel / PhysicsManager.GValue < anatomy.GLimit) {
-								float distThrottle = Mathf.Clamp (Mathf.Abs ((angleToTarget + newVel) / 100), 0.05f, 1);
+								float distThrottle = Mathf.Clamp (Mathf.Abs (angleToTarget / 90), 0.05f, 1);
 								newThrottle = distThrottle;
 							} else {
 								newThrottle = limb.throttle / 2;
@@ -194,16 +162,18 @@ namespace Cosmos
 						}
 					} else {
 						if (Mathf.Abs (newVel) < Mathf.Abs (currentAngVel)) {
-							newThrottle = Mathf.DeltaAngle (myAngle + newVel, targetAngle) / throttleMaxAngle;
-
+							//newThrottle = Mathf.DeltaAngle (myAngle + newVel, targetAngle) / throttleMaxAngle;
+							newThrottle = torqueIntervalsToNillVel / velIntervalsToTarget;
 						}
 					}
 				} else {
 					//Main Thrusters
 					Vector3 maxThrust = physicsObject.ComputeRelativeForce (limb.force);
-					angleToTarget = Mathf.Abs (angleToTarget);
-					float distToTarget = (target - Position).magnitude;
-					float distanceThrottle = distToTarget / physicsObject.velocity.magnitude;
+					angleToTarget = Mathf.Abs (angleToTarget);				
+					float distToTarget = (targetPos - Position).magnitude;
+					float distanceThrottle = 1;
+
+					//Throttle based of angle offset from thrust vector
 					if (angleToTarget > 0) {
 						if (angleToTarget > 90f) {
 							newThrottle = (throttleMaxAngle - (angleToTarget - 90f)) / throttleMaxAngle;
@@ -213,6 +183,8 @@ namespace Cosmos
 							newThrottle = 1f;
 						}
 					}
+
+					newThrottle *= distanceThrottle;
 				}
 				if (newThrottle < 0f) {
 					newThrottle = 0f;
@@ -249,13 +221,16 @@ namespace Cosmos
 			//
 			bool accelerate = true;
 			int velIntervalsToTarget = Mathf.FloorToInt (distToTarget / vel);
-			int accIntervalsToNillVel = Mathf.CeilToInt (vel / totalThrustVector.magnitude * physicsObject.mass);
-			int turningTimeBuffer = 50;
+			int accIntervalsToNillVel = Mathf.CeilToInt (vel / (totalThrustVector.magnitude / physicsObject.mass));
+			float turningTimeBuffer = 50;
 			//If can deccel in time and and moving towards target 
 			float velAngleToTarget = Vector3.Angle (velVector, targetVector);
-			if (velAngleToTarget > 30 && vel > 0.01f) {
-				accelerate = false;
-			} else if (Mathf.Abs (velIntervalsToTarget) < Mathf.Abs (accIntervalsToNillVel) + turningTimeBuffer && Mathf.Abs ((target - pos + physicsObject.velocity).magnitude) > Mathf.Abs (distToTarget)) {
+			// if it takes longer to slow down than it takes to reach the target (and moving towards target)
+			if ((Mathf.Abs (velIntervalsToTarget) < 1.5f * Mathf.Abs (accIntervalsToNillVel) + turningTimeBuffer && Mathf.Abs ((target - pos + physicsObject.velocity).magnitude) > Mathf.Abs (distToTarget))) {
+				accelerate = false; 
+			}
+			//if vel offset too much
+			if ((velAngleToTarget > 45 && Mathf.Abs (vel) > 0.01f)) {
 				accelerate = false;
 			}
 

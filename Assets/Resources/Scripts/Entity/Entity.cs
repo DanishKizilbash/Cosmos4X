@@ -7,20 +7,17 @@ namespace Cosmos
 {
 	public abstract class Entity:Tickable
 	{
-		public Exposable exposer;
 		public string cachedDefID = "";
 		private Vector3 position = Vector3.zero;
 		private Graphic graphic;	
 		private Vector2 cachedScale = Vector2.one;
 		public MeshDisplay meshDisplay;
-		private string name;
+		public float displayDepth;
 		public Def def;
-		public bool isDestroyed = false;
 		public bool isVisible = true;
 		public bool isInitiated = false;
 		//
-		private bool selected = false;
-		public bool selectable = true;
+		private bool _selected = false;
 		private VectorLine selectedLine;
 		//
 		public List<Entity> linkedEntities = new List<Entity> ();
@@ -33,11 +30,11 @@ namespace Cosmos
 		public PlanetarySystem system;
 		public bool isSelected {
 			get {
-				return selected;
+				return _selected;
 			}
 			set {
 				OnSelected (value);
-				selected = value;
+				_selected = value;
 			}
 		}
 		public virtual Vector3 Position {
@@ -59,9 +56,7 @@ namespace Cosmos
 		}
 		public virtual Vector3 ScreenPosition {
 			get {
-
-				return Center;
-
+				return Position + Vector3.back * displayDepth;
 			}
 		}
 		public Vector2 scale {
@@ -75,9 +70,9 @@ namespace Cosmos
 				}
 			}
 		}
-		public Rect bounds {
+		public Rect rect {
 			get {
-				return new Rect (Position.x, Position.y, scale.x * 2, scale.y * 2);
+				return new Rect (Position.x, Position.y, scale.x, scale.y);
 			}
 		}
 		public virtual Graphic MainGraphic {
@@ -96,7 +91,7 @@ namespace Cosmos
 				return name;
 			}
 			set {
-				Finder.EntityDatabase.UpdateKey (name, value);
+				Finder.entityDatabase.UpdateKey (name, value);
 				name = value;
 			}
 		}
@@ -123,35 +118,29 @@ namespace Cosmos
 		}
 		public override void Tick ()
 		{
-			if (isSelected) {
-				Expose ();
-			}
 		}
-		public virtual void OnSelected (bool selected)
+		public override void OnSelected (bool value)
 		{
-			if (selected) {
-				if (!Finder.SelectedEntities.Contains (this)) {
-					Finder.SelectedEntities.Add (this);
+			if (value) {
+				if (!Finder.selectedEntities.Contains (this)) {
+					Finder.selectedEntities.Add (this);
 					selectedLine.active = true;
-					drawSelectedLine ();
+					DrawSelectedLine ();
 				}
-				Expose ();
 			} else {
-				Finder.SelectedEntities.Remove (this);
+				Finder.selectedEntities.Remove (this);
 				selectedLine.active = false;
 				selectedLine.StopDrawing3DAuto ();
-				Expose (false);
 			}
 		}
-		private void drawSelectedLine ()
+		private void DrawSelectedLine ()
 		{
 			float rad = scale.x > scale.y ? scale.x / 2 : scale.y / 2;
-			selectedLine.MakeCircle (Center, Vector3.forward, rad, 16);	
+			selectedLine.MakeRect (new Rect (position + Vector3.down * scale.y, scale));	
 			selectedLine.Draw3DAuto ();
 		}
 		public virtual Entity Init (string defID)
 		{
-			exposer = new Exposable (this);
 			system = GameManager.currentGame.currentSystem;
 			system.AddEntity (this);
 			getDef (defID);
@@ -162,27 +151,27 @@ namespace Cosmos
 			if (id == "") {
 				id = "Entity";
 			}
-			Name = String.Join ("", new string[]{id,Finder.GlobalCount.ToString ()});
+			Name = String.Join ("", new string[]{id,Finder.globalCount.ToString ()});
 			getGraphics ();
 			scale = MainGraphic.scale;
 			SetAttributes ();
 			if (Interval == 0) {
 				Interval = 60;
 			}
-			Finder.EntityDatabase.Add (this);
-			Finder.GlobalCount++;
+			Finder.entityDatabase.Add (this);
+			Finder.globalCount++;
 			isInitiated = true;
 			QueForUpdate ();
 			linkedEntities = new List<Entity> ();
 			stockpile = new Stockpile (this);
-			selectedLine = new VectorLine ("Selected_" + name, new Vector3[64], null, 3.0f);
+			selectedLine = new VectorLine ("Selected_" + name, new Vector3[8], null, 3.0f);
 			selectedLine.color = Color.green;
 			return this;
 		}
 		public virtual void getGraphics ()
 		{
 			string textureID = def.GetAttribute ("TextureID");	
-			MainGraphic = Finder.GraphicDatabase.Get (textureID, def);
+			MainGraphic = Finder.graphicDatabase.Get (textureID, def);
 		}
 		public virtual void getDef (string defID)
 		{
@@ -209,25 +198,26 @@ namespace Cosmos
 		{
 			linkedEntities.Remove (entity);
 		}
-		public virtual void MoveTo (Vector3 iposition, bool skipParentTile=false, bool skipTick=false, bool skipDraw=false)
+		public virtual void MoveCenterTo (Vector3 iposition)
+		{
+			Vector3 posOffset = new Vector3 (-scale.x / 2, scale.y / 2, 0);
+			MoveTo (iposition + posOffset);
+		}
+		public virtual void MoveTo (Vector3 iposition)
 		{
 			position = iposition;
 			foreach (Entity link in linkedEntities) {
-				link.MoveTo (iposition, skipTick, skipDraw);
+				link.MoveTo (iposition);
 			}
 			if (isSelected) {
-				drawSelectedLine ();
+				DrawSelectedLine ();
 			}
-			if (!skipTick) {
-				QueForTick ();
-			} 
-			if (!skipDraw) {
-				QueForDraw ();
-			}
+			QueForTick ();			
+			QueForDraw ();			
 		}
-		public virtual void MoveTo (float x, float y, float z, bool skipParentTile=false, bool skipTick=false, bool skipDraw=false)
+		public virtual void MoveTo (float x, float y, float z)
 		{
-			MoveTo (new Vector3 (x, y, z), skipParentTile, skipTick, skipDraw);			
+			MoveTo (new Vector3 (x, y, z));			
 		}
 		public virtual void SetVisible (bool visible)
 		{
@@ -242,18 +232,14 @@ namespace Cosmos
 				isSelected = false;
 			}
 		}
-		public virtual void Destroy ()
+		public override void Destroy ()
 		{
+			base.Destroy ();
 			OnSelected (false);
 			system.RemoveEntity (this);
 			MeshManager.CleanMeshDisplay (meshDisplay);
 			TickManager.RemoveTicker (this);
 			Finder.RemoveAllInstancesOf (this);
-			/*if (Exposer != null) {
-				Exposer.Destroy ();
-			}
-			*/
-			isDestroyed = true;
 		}
 		//
 		public virtual void SetAttributes ()
@@ -269,9 +255,13 @@ namespace Cosmos
 			newSystem.AddEntity (this);
 			system = newSystem;
 		}
-		public virtual bool InRect (Rect rect)
+		public virtual bool InRect (Rect tRect)
 		{
-			return MathI.RectIntersect (rect, bounds);
+			return MathI.RectIntersect (tRect, rect);
+		}
+		public virtual bool PointInside (Vector3 point)
+		{
+			return MathI.PointInRectangle (point + new Vector3 (0, rect.height, 0), rect);
 		}
 		public virtual void Print ()
 		{
@@ -279,19 +269,6 @@ namespace Cosmos
 		}
 		public abstract string DefaultID ();
 		//
-		public virtual void Expose (bool visible=true)
-		{
-			//exposer.Expose ();
-			string type = this.GetType ().Name.ToString ();
-			if (!UIManager.SetPanelEntity (type, this, visible)) {
-				string basetype = this.GetType ().BaseType.ToString ();
-				string[] basetypeString = basetype.Split (new string[1]{"."}, StringSplitOptions.None);
-				if (!UIManager.SetPanelEntity (basetypeString [1], this, visible)) {
-					UIManager.SetPanelEntity ("Entity", this, visible);
-				}
-			}
-			
-		}
 		public override string ToString ()
 		{
 			return Name;

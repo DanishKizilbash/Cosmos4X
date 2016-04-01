@@ -7,7 +7,44 @@ namespace Cosmos
 {
 	public class ActorShip : Actor
 	{
-		public Colony homeColony;
+		private Fleet _fleet;
+		public Fleet fleet {
+			get {
+				return _fleet;
+			}
+			set {
+				Fleet oldFleet = _fleet;
+				_fleet = value;
+				if (_fleet != oldFleet) {
+					if (oldFleet != null) {
+						oldFleet.RemoveShip (this);
+					}
+					if (_fleet != null) {
+						_fleet.AddShip (this);
+					}
+				}
+			}
+		}
+		private Colony _homeColony;
+		public Colony homeColony {
+			get {
+				if (_homeColony != null) {
+					if (_homeColony.parent == null) {
+						homeColony = null;
+					}
+				}
+				return _homeColony;
+			}
+			set {
+				if (_homeColony != null) {
+					_homeColony.RemoveGarrisonedShip (this);
+				}
+				_homeColony = value;
+				if (_homeColony != null && isConstructed) {
+					_homeColony.AddGarrisonedShip (this);
+				}
+			}
+		}
 
 		public override Entity Init (string defID)
 		{
@@ -22,9 +59,9 @@ namespace Cosmos
 		{
 			anatomy = new Anatomy ();
 			anatomy.Initiate (this, Parser.StringToFloat (def.GetAttribute ("Life")));
-			anatomy.AddLimb ("Bridge", 5);
-			AddThruster (2, new Vector3 (0f, 0.005f, 0f), new Vector3 (-0.5f, -0.5f, 0f));
-			AddThruster (2, new Vector3 (0f, 0.005f, 0f), new Vector3 (0.5f, -0.5f, 0f));
+			anatomy.AddLimb ("Bridge", "Limb_Ship_Bridge_BasicBridge");
+			AddThruster (2, new Vector3 (0f, 0.02f, 0f), new Vector3 (-0.5f, -0.5f, 0f));
+			AddThruster (2, new Vector3 (0f, 0.02f, 0f), new Vector3 (0.5f, -0.5f, 0f));
 			//
 			AddThruster (2, new Vector3 (0.05f, 0f, 0f), new Vector3 (-1f, 1f, 0f), true);
 			AddThruster (2, new Vector3 (-0.05f, 0f, 0f), new Vector3 (1f, 1f, 0f), true);
@@ -35,15 +72,46 @@ namespace Cosmos
 		}
 		public void AddThruster (float condition, Vector3 force, Vector3 offset, bool isRCS=false)
 		{
-			ThrusterLimb thrusterLimb = (ThrusterLimb)new ThrusterLimb ().Init (Limb.Condition.Normal, condition);
-			anatomy.AddLimb ("Thruster", condition, thrusterLimb);
+			string defIDString = "Limb_Ship_Thruster_";
+			ThrusterLimb thrusterLimb;
+			if (isRCS) {
+				thrusterLimb = (ThrusterLimb)new ThrusterLimb ().Init (defIDString + "BasicRCSThruster");
+			} else {
+				thrusterLimb = (ThrusterLimb)new ThrusterLimb ().Init (defIDString + "BasicThruster");
+			}
+			anatomy.AddLimb ("Thruster", "", thrusterLimb);
 			thrusterLimb.force = force;
-			thrusterLimb.offset = offset;
-			thrusterLimb.isRCS = isRCS;			
+			thrusterLimb.offset = offset;	
 		}
 		public override void Tick ()
 		{
 			base.Tick ();
+		}
+		public override void SetConstructed (bool value)
+		{
+			base.SetConstructed (value);
+			homeColony = _homeColony;
+		}
+
+		public override void OnSelected (bool selected)
+		{
+			base.OnSelected (selected);
+			if (selected) {
+				if (isSelected) {
+					if (fleet != null) {
+						Finder.selectedFleet = fleet;
+					}
+				}
+			} 
+		}
+		public override void Destroy ()
+		{
+			base.Destroy ();
+			fleet.RemoveShip (this);
+			if (homeColony != null) {
+				homeColony.RemoveGarrisonedShip (this);
+				homeColony = null;
+			}
 		}
 		public override string DefaultID ()
 		{

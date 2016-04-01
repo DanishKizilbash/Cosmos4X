@@ -12,7 +12,6 @@ namespace Cosmos
 		public List<PlanetarySystem> planetarySystems;
 		public int currentSystemID;		
 		public  PlanetarySystem currentSystem;
-		private int dir = 1;
 		private List<int> zoomLevels;
 		public float currentZoomScale = 1;
 		private int cachedZoom;
@@ -41,8 +40,8 @@ namespace Cosmos
 		public void Start ()
 		{
 			EntityManager.AddPlanetarySystem (5);
-			EntityManager.AddShip (1);	
 			planetarySystems [0].SetVisiblity (true);
+			TickManager.AddPersistant (Update);
 		}
 
 		public void Update ()

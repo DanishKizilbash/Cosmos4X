@@ -5,15 +5,15 @@ namespace Cosmos
 {
 	public static class EntityManager
 	{
-		public static List<ActorShip> AddShip (int qty)
+		public static List<ActorShip> AddShip (int qty, bool isConstructed=false)
 		{
-			return AddShip (qty, 0, 0, 0);
+			return AddShip (qty, 0, 0, 0, GameManager.currentGame.currentSystemID, null, isConstructed);
 		}
-		public static List<ActorShip> AddShip (int qty, Vector3 position, int systemID=-1, Colony homeColony = null)
+		public static List<ActorShip> AddShip (int qty, Vector3 position, int systemID=-1, Colony homeColony = null, bool isConstructed=false)
 		{
-			return AddShip (qty, position.x, position.y, position.z, systemID, homeColony);
+			return AddShip (qty, position.x, position.y, position.z, systemID, homeColony, isConstructed);
 		}
-		public static List<ActorShip> AddShip (int qty, float x, float z, float y, int systemID=-1, Colony homeColony = null)
+		public static List<ActorShip> AddShip (int qty, float x, float z, float y, int systemID=-1, Colony homeColony = null, bool isConstructed=false)
 		{
 			if (systemID == -1) {
 				systemID = GameManager.currentGame.currentSystemID;
@@ -23,9 +23,15 @@ namespace Cosmos
 				ActorShip act;
 				act = new ActorShip ();
 				act.Init ("");
-				act.MoveTo (new Vector3 (x, y, z));
-				act.system = GameManager.currentGame.planetarySystems [systemID];
+				act.isConstructed = isConstructed;
 				act.homeColony = homeColony;
+				if (homeColony != null) {
+					act.MoveCenterTo (homeColony.parent.Center);
+					act.system = homeColony.parent.system;
+				} else {
+					act.MoveCenterTo (new Vector3 (x, y, z));
+					act.system = GameManager.currentGame.planetarySystems [systemID];
+				}
 				ships.Add (act);
 			}
 			return ships;

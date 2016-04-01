@@ -10,21 +10,16 @@ namespace Cosmos
 		{			
 			Application.targetFrameRate = 60;
 			GameManager.NewGame (0, new Vector3 (1, 0, 1));
-
 		}
 
 		void Update ()
 		{
-			if (GameManager.curGameState == GameManager.GameState.GameRunning) {
-				GameManager.Update ();
-			}
+			GameManager.Update ();
 		}
 
 		void LateUpdate ()
 		{
-			if (GameManager.curGameState == GameManager.GameState.GameRunning) {
-				GameManager.LateUpdate ();
-			}
+			GameManager.LateUpdate ();
 		}
 	}
 }

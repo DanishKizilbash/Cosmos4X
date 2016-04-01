@@ -1,26 +1,26 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Scripts\Entity\Things\Actor\Actor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Scripts\Entity\Things\Actor\Ship\Fleet.cs">
     <Files>
-      <File FileName="Assets\Resources\Scripts\Game.cs" Line="85" Column="23" />
-      <File FileName="Assets\Resources\Scripts\Managers\InputManager.cs" Line="124" Column="26" />
-      <File FileName="Assets\Resources\Scripts\Managers\GameManager.cs" Line="77" Column="4" />
-      <File FileName="Assets\Resources\Scripts\Entity\Things\Actor\Actor.cs" Line="228" Column="4" />
-      <File FileName="Assets\Resources\Scripts\Physics\PhysicsObject.cs" Line="82" Column="5" />
-      <File FileName="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Limb.cs" Line="23" Column="16" />
-      <File FileName="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\Anatomy.cs" Line="16" Column="23" />
-      <File FileName="Assets\Resources\Scripts\Entity\Things\Actor\Ship\ActorShip.cs" Line="19" Column="30" />
-      <File FileName="Assets\Resources\Scripts\Entity\Things\Actor\Anatomy\ThrusterLimb.cs" Line="10" Column="21" />
-      <File FileName="Assets\Resources\Scripts\AI\Brain\Task\TaskManueverToPosition.cs" Line="20" Column="12" />
-      <File FileName="Assets\Resources\Scripts\Managers\PhysicsManager.cs" Line="14" Column="31" />
-      <File FileName="Assets\Resources\Scripts\Math\MathI.cs" Line="95" Column="33" />
-      <File FileName="Assets\Resources\Scripts\Managers\EntityManager.cs" Line="26" Column="36" />
-      <File FileName="Assets\Resources\Scripts\Entity\Entity.cs" Line="218" Column="4" />
+      <File FileName="Assets\Resources\Scripts\UI\Panels\Panel.cs" Line="178" Column="32" />
+      <File FileName="Assets\Resources\Scripts\Managers\UIManager.cs" Line="29" Column="5" />
+      <File FileName="Assets\Resources\Scripts\Entity\Things\Actor\Ship\Fleet.cs" Line="121" Column="16" />
+      <File FileName="Assets\Resources\Scripts\Managers\InputManager.cs" Line="231" Column="19" />
+      <File FileName="Assets\Resources\Scripts\UI\Panels\Panels\ActorShipPanel.cs" Line="22" Column="49" />
+      <File FileName="Assets\Resources\Scripts\UI\UIElement\UIElement.cs" Line="9" Column="33" />
+      <File FileName="Assets\Resources\Scripts\UI\Panels\Panels\FleetPanel.cs" Line="26" Column="48" />
+      <File FileName="Assets\Resources\Scripts\UI\Panels\Panels\CelestialBodyPanel.cs" Line="1" Column="1" />
+      <File FileName="Assets\Resources\Scripts\UI\Panels\Panels\ColonyPanel.cs" Line="45" Column="31" />
+      <File FileName="Assets\Resources\Scripts\UI\Panels\Panels\EntityPanel.cs" Line="33" Column="28" />
+      <File FileName="Assets\Resources\Scripts\Entity\Entity.cs" Line="199" Column="35" />
+      <File FileName="Assets\Resources\Scripts\Managers\TickManager.cs" Line="58" Column="69" />
+      <File FileName="Assets\Resources\Scripts\Databases\Finder.cs" Line="37" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="D:\Git\Game Dev\Cosmos4X\Assets\Resources\Scripts\Entity\Things\Prop\Resources\PropResource.cs" line="21" />
+      <Catchpoint exceptionName="System.InvalidOperationException" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

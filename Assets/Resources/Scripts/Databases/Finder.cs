@@ -10,36 +10,47 @@ namespace Cosmos
 	public static class Finder
 	{
 		private static List<object> removalQue = new List<object> ();
-		public static double GlobalCount = 0;
-		public static List<Entity> SelectedEntities = new List<Entity> ();
+		public static double globalCount = 0;
+		public static List<Entity> selectedEntities = new List<Entity> ();
+		public static Fleet selectedFleet = null;
 		//
-		public static GameObjectsDatabase GameObjectDatabase = new GameObjectsDatabase ();
-		public static ResourcesDatabase ResourceDatabase = new ResourcesDatabase ();
-		public static EntitiesDatabase EntityDatabase = new EntitiesDatabase ();
-		public static GraphicsDatabase GraphicDatabase = new GraphicsDatabase ();
-		public static TexturesDatabase TextureDatabase = new TexturesDatabase ();
-		public static SpriteAtlasesDatabase SpriteAtlasDatabase = new SpriteAtlasesDatabase ();
-		public static ActorsDatabase ActorDatabase = new ActorsDatabase ();
+		public static GameObjectsDatabase gameObjectDatabase = new GameObjectsDatabase ();
+		public static ResourcesDatabase resourceDatabase = new ResourcesDatabase ();
+		public static EntitiesDatabase entityDatabase = new EntitiesDatabase ();
+		public static GraphicsDatabase graphicDatabase = new GraphicsDatabase ();
+		public static TexturesDatabase textureDatabase = new TexturesDatabase ();
+		public static SpriteAtlasesDatabase spriteAtlasDatabase = new SpriteAtlasesDatabase ();
+		public static ActorsDatabase actorDatabase = new ActorsDatabase ();
+		public static FleetsDatabase fleetDatabase = new FleetsDatabase ();
 		//
 		public static int exCount = 0;
 		public static void ClearSelectedEntities ()
 		{
-			foreach (Entity entity in SelectedEntities) {
+			foreach (Entity entity in selectedEntities) {
 				if (entity != null) {
 					entity.isSelected = false;
 				}
 			}
-			SelectedEntities.Clear ();
+			selectedEntities.Clear ();
 		}
 		public static void SelectEntity (Entity entity)
 		{
 			entity.isSelected = true;
-			SelectedEntities.Add (entity);
+			selectedEntities.Add (entity);
 		}
-		public static void DeSelectEntity (Entity entity)
+		public static void DeselectEntity (Entity entity)
 		{
 			entity.isSelected = false;
-			SelectedEntities.Remove (entity);
+			selectedEntities.Remove (entity);
+		}
+		public static void DeselectAll ()
+		{
+			if (Finder.selectedFleet != null) {
+				Finder.selectedFleet.isSelected = false;
+			}
+			while (selectedEntities.Count>0) {
+				selectedEntities [0].isSelected = false;
+			}
 		}
 		public static void Update ()
 		{
@@ -57,12 +68,12 @@ namespace Cosmos
 		{
 			try {
 				Entity eObj = (Entity)obj;
-				EntityDatabase.Remove (eObj); 
+				entityDatabase.Remove (eObj); 
 			} catch (InvalidCastException) { 
 				//Debug.Log ("Cannot convert to Entity");
 			}
 			try {
-				ResourceDatabase.Remove ((Resource)obj);
+				resourceDatabase.Remove ((Resource)obj);
 			} catch (InvalidCastException) { 
 				//Debug.Log ("Cannot convert to Resource");
 			}
@@ -306,6 +317,10 @@ namespace Cosmos
 		public class ActorsDatabase:Database
 		{
 
+		}
+		public class FleetsDatabase:Database
+		{
+			
 		}
 
 		public class ResourcesDatabase:Database
