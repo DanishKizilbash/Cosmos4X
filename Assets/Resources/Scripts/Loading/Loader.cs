@@ -25,7 +25,8 @@ namespace Cosmos
 
 		public static void LoadXMLPaths ()
 		{
-			DirectoryInfo dir = new DirectoryInfo ("Assets/Resources/XMLDefs");
+			Debug.Log (Application.dataPath);
+			DirectoryInfo dir = new DirectoryInfo (Application.dataPath + "/Resources/XMLDefs");
 			FileInfo[] info = dir.GetFiles ("*.xml");
 			var pathname = info.Select (f => f.FullName).ToArray ();
 			foreach (string f in pathname) {
@@ -72,7 +73,7 @@ namespace Cosmos
 		{
 			//Load xml doc
 			XmlDocument doc = new XmlDocument ();
-			doc.Load (UnityEngine.Application.dataPath + path);
+			doc.Load (Application.dataPath + path);
 			XmlNode root = doc.DocumentElement;
 			//
 			string baseClass;
@@ -104,7 +105,7 @@ namespace Cosmos
 		{
 			//Load xml doc
 			XmlDocument doc = new XmlDocument ();
-			doc.Load (UnityEngine.Application.dataPath + path);
+			doc.Load (Application.dataPath + path);
 			XmlNode root = doc.DocumentElement;
 			//
 			string skillCategory;

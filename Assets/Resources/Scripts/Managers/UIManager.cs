@@ -25,7 +25,7 @@ namespace Cosmos
 			ClearPanelExposables ();
 			ExposeSelectedExposables ();
 			if (txtFps != null) {
-				txtFps.text = "FPS : " + TickManager.trueFPS.ToString () + "   -" + TickManager.tickSpeedMultiplier + "X";
+				txtFps.text = "FPS : " + TickManager.trueFPS.ToString () + " | " + TickManager.tickSpeedMultiplier + "X";
 			}
 			//Update Panels
 			if (UIPanels != null) {
@@ -61,6 +61,7 @@ namespace Cosmos
 			UIPanels.Add ("Colony", new ColonyPanel ().Init ("Colony", GetPanel ("CelestialBody"), true));
 			UIPanels.Add ("ActorShip", new ActorShipPanel ().Init ("ActorShip", GetPanel ("Entity")));
 			UIPanels.Add ("Fleet", new FleetPanel ().Init ("Fleet"));
+			UIPanels.Add ("Stockpile", new StockpilePanel ().Init ("Stockpile"));
 		}
 		private static void SetPanelPositions ()
 		{

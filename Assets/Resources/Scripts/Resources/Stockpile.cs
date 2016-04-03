@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 namespace Cosmos
 {
-	public class Stockpile
+	public class Stockpile:Exposable
 	{
 		public Entity entity;
 		public Dictionary<string,Resource> resList;
@@ -45,6 +45,9 @@ namespace Cosmos
 			foreach (Resource resource in resList.Values) {
 				resource.Destroy ();
 			}
+		}
+		public override void OnSelected (bool value)
+		{
 		}
 	}
 }
